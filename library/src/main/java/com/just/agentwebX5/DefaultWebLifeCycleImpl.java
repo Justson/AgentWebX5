@@ -24,6 +24,7 @@ public class DefaultWebLifeCycleImpl implements WebLifeCycle {
                 this.mWebView.onResume();
 
             this.mWebView.resumeTimers();
+
         }
 
 
