@@ -1,6 +1,7 @@
 package com.just.agentwebx5_sample;
 
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,7 @@ public class CommonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_common);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
         mFrameLayout = (FrameLayout) this.findViewById(R.id.container_framelayout);
 

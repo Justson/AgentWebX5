@@ -138,7 +138,7 @@ public class DefaultWebCreator implements WebCreator {
             mWebView = this.mWebView;
             AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
         } else {
-            mWebView = new WebView(mActivity);
+            mWebView = new X5WebView(mActivity);
             AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_DEFAULT_TYPE;
         }
 

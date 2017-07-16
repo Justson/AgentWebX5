@@ -60,6 +60,11 @@ public class VideoImpl implements IVideo, EventInterceptor {
 
         moiveParentView.setVisibility(View.VISIBLE);
 
+
+
+
+
+
     }
 
     @Override
@@ -84,6 +89,8 @@ public class VideoImpl implements IVideo, EventInterceptor {
         this.moiveView = null;
         if (mWebView != null)
             mWebView.setVisibility(View.VISIBLE);
+
+
 
     }
 
