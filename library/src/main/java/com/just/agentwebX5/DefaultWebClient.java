@@ -7,10 +7,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
+import com.alipay.sdk.app.PayTask;
+import com.alipay.sdk.util.H5PayResultModel;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.WebView;
@@ -37,10 +40,21 @@ public class DefaultWebClient extends WrapperWebViewClient {
     private WebViewClient mWebViewClient;
     private boolean webClientHelper=false;
     private static final String WEBVIEWCLIENTPATH="com.tencent.smtt.sdk.WebViewClient";
-
-
     public static final String INTENT_SCHEME="intent://";
     public static final String WEBCHAT_PAY_SCHEME="weixin://wap/pay?";
+
+    private static final boolean hasAlipayLib;
+    static {
+        boolean tag=true;
+        try {
+            Class.forName("com.alipay.sdk.app.PayTask");
+        }catch (Throwable ignore){
+            tag=false;
+        }
+        hasAlipayLib =tag;
+
+        LogUtils.i("Info","static  hasAlipayLib:"+hasAlipayLib);
+    }
 
     DefaultWebClient(@NonNull Activity activity, WebViewClient client, WebViewClientCallbackManager manager,boolean webClientHelper) {
         super(client);
@@ -74,6 +88,15 @@ public class DefaultWebClient extends WrapperWebViewClient {
             return true;
         }
 
+        LogUtils.i("Info","shouldOverrideUrlLoading --->  url:"+url);
+        if(webClientHelper&&handleNormalLinked(url)){
+            return true;
+        }
+
+
+        if(webClientHelper&&hasAlipayLib&&isAlipay(view,url))
+            return true;
+
         if(tag>0)
             return false;
 
@@ -81,6 +104,37 @@ public class DefaultWebClient extends WrapperWebViewClient {
         return super.shouldOverrideUrlLoading(view, url);
     }
 
+
+    private boolean isAlipay(final WebView view, String url) {
+
+        Activity mActivity=null;
+        if((mActivity=mWeakReference.get())==null)
+            return false;
+        final PayTask task = new PayTask(mActivity);
+        final String ex = task.fetchOrderInfoFromH5PayUrl(url);
+        LogUtils.i("Info", "alipay:" + ex);
+        if (!TextUtils.isEmpty(ex)) {
+            //System.out.println("paytask:::::" + url);
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+                public void run() {
+                    System.out.println("payTask:::" + ex);
+                    final H5PayResultModel result = task.h5Pay(ex, true);
+                    if (!TextUtils.isEmpty(result.getReturnUrl())) {
+                        AgentWebUtils.runInUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                view.loadUrl(result.getReturnUrl());
+                            }
+                        });
+                    }
+                }
+            });
+
+            return true;
+        }
+        return false;
+    }
 
     private void handleIntentUrl(String intentUrl){
         try {

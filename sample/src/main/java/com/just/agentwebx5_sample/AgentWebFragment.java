@@ -160,8 +160,8 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
                 return true;
             else if(url.startsWith("youku"))
                 return true;
-            else if(isAlipay(view,url))
-                return true;
+//            else if(isAlipay(view,url))
+//                return true;
 
 
             return false;

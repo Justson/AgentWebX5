@@ -39,7 +39,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:design:${SUPPORT_LIB_VERSION}"
     compile "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
-    compile files('libs/libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
+    provided fileTree(include: ['*.jar'], dir: 'providedLibs')
 }
 publish {
     userOrg = 'just'
