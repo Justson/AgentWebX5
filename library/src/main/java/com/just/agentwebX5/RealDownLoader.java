@@ -19,12 +19,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.UnknownFormatConversionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
  * Created by cenxiaozhong on 2017/5/13.
- * source CODE  https://github.com/Justson/AgentWeb
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements Observer {
@@ -73,7 +74,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
         super.onPreExecute();
 
         mObservable.addObserver(this);
-        buildNotify(new Intent(), mDownLoadTask.getId(), "正在下载中");
+        buildNotify(new Intent(), mDownLoadTask.getId(),mDownLoadTask.getDownLoadMsgConfig().getPreLoading());
     }
 
     private boolean checkDownLoaderCondition() {
@@ -106,9 +107,9 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
         try {
             begin = System.currentTimeMillis();
             if (!checkDownLoaderCondition())
-                return DownLoadErrorMsg.STORAGE_ERROR.CODE;
+                return DownLoadMsg.STORAGE_ERROR.CODE;
             if (!checknet())
-                return DownLoadErrorMsg.NETWORK_ERROR_CONNECTION.CODE;
+                return DownLoadMsg.NETWORK_ERROR_CONNECTION.CODE;
             result = doDownLoad();
 
         } catch (Exception e) {
@@ -136,7 +137,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
             mHttpURLConnection.connect();
             if (mHttpURLConnection.getResponseCode() != 200 && mHttpURLConnection.getResponseCode() != 206) {
 
-                return DownLoadErrorMsg.NETWORK_ERROR_STATUS_CODE.CODE;
+                return DownLoadMsg.NETWORK_ERROR_STATUS_CODE.CODE;
             }
 
             return doDownLoad(mHttpURLConnection.getInputStream(), new LoadingRandomAccessFile(mDownLoadTask.getFile()));
@@ -163,19 +164,28 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     protected void onProgressUpdate(Integer... values) {
 
 
+        try {
+
+            //LogUtils.i("Info", "progress:" + ((tmp + loaded) / Float.valueOf(totals) * 100) + "tmp:" + tmp + "  load=:" + loaded + "  total:" + totals);
+            long c = System.currentTimeMillis();
+            if (mNotity != null && c - time > 800) {
+                time = c;
+                if (!mNotity.hasDeleteContent())
+                    mNotity.setDelecte(buildCancelContent(mDownLoadTask.getContext().getApplicationContext(), mDownLoadTask.getId()));
+
+                int mProgress=(int) ((tmp + loaded) / Float.valueOf(totals) * 100);
+                mNotity.setContentText(String.format(mDownLoadTask.getDownLoadMsgConfig().getLoading(),mProgress+"%"));
+                mNotity.setProgress(100,mProgress , false);
+            }
+
+        }catch (UnknownFormatConversionException e){
+            e.printStackTrace();
+        }
         long current = System.currentTimeMillis();
         used = current - begin;
 
 
-        //LogUtils.i("Info", "progress:" + ((tmp + loaded) / Float.valueOf(totals) * 100) + "tmp:" + tmp + "  load=:" + loaded + "  total:" + totals);
 
-        long c = System.currentTimeMillis();
-        if (mNotity != null && c - time > 800) {
-            time = c;
-            if (!mNotity.hasDeleteContent())
-                mNotity.setDelecte(buildCancelContent(mDownLoadTask.getContext().getApplicationContext(), mDownLoadTask.getId()));
-            mNotity.setProgress(100, (int) ((tmp + loaded) / Float.valueOf(totals) * 100), false);
-        }
     }
 
     @Override
@@ -202,7 +212,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
                 // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent rightPendIntent = PendingIntent.getActivity(mDownLoadTask.getContext(),
                         mDownLoadTask.getId()<<4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                mNotity.setProgressFinish("点击打开", rightPendIntent);
+                mNotity.setProgressFinish(mDownLoadTask.getDownLoadMsgConfig().getClickOpen(), rightPendIntent);
 
             }
 
@@ -221,7 +231,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
             return;
         }
         if (code > 200) {
-            mDownLoadResultListener.error(mDownLoadTask.getFile().getAbsolutePath(), mDownLoadTask.getUrl(), DownLoadErrorMsg.getMsgByCode(code), this.e == null ? new RuntimeException("下载出错 ， 原因:" + DownLoadErrorMsg.getMsgByCode(code)) : this.e);
+            mDownLoadResultListener.error(mDownLoadTask.getFile().getAbsolutePath(), mDownLoadTask.getUrl(), DownLoadMsg.getMsgByCode(code), this.e == null ? new RuntimeException("download fail ， cause:" + DownLoadMsg.getMsgByCode(code)) : this.e);
         } else {
             mDownLoadResultListener.success(mDownLoadTask.getFile().getPath());
         }
@@ -238,10 +248,10 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
             PendingIntent rightPendIntent = PendingIntent.getActivity(mContext,
                     0x33 * id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             int smallIcon = mDownLoadTask.getDrawableRes();
-            String ticker = "您有一条新通知";
+            String ticker = mDownLoadTask.getDownLoadMsgConfig().getTrickter();
             mNotity = new Notity(mContext, id);
 
-            mNotity.notify_progress(rightPendIntent, smallIcon, ticker, "文件下载", progressHint, false, false, false, buildCancelContent(mContext, id));
+            mNotity.notify_progress(rightPendIntent, smallIcon, ticker, mDownLoadTask.getDownLoadMsgConfig().getFileDownLoad(), progressHint, false, false, false, buildCancelContent(mContext, id));
             mNotity.sent();
         }
     }
@@ -281,7 +291,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
                 if (!checknet()) {
                     LogUtils.i("Info", "network");
-                    return DownLoadErrorMsg.NETWORK_ERROR_CONNECTION.CODE;
+                    return DownLoadMsg.NETWORK_ERROR_CONNECTION.CODE;
                 }
 
                 if (mSpeed != 0) {
@@ -290,15 +300,15 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
                     previousBlockTime = System.currentTimeMillis();
                 } else if ((System.currentTimeMillis() - previousBlockTime) > TIME_OUT) {
                     LogUtils.i("Info", "timeout");
-                    return DownLoadErrorMsg.TIME_OUT.CODE;
+                    return DownLoadMsg.TIME_OUT.CODE;
                 }
             }
 
             LogUtils.i("Info", "atomic:" + atomic.get() );
             if (atomic.get()) {
-                return DownLoadErrorMsg.USER_CANCEL.CODE;
+                return DownLoadMsg.USER_CANCEL.CODE;
             }
-            return DownLoadErrorMsg.SUCCESSFULL.CODE;
+            return DownLoadMsg.SUCCESSFULL.CODE;
         } finally {
             CloseUtils.closeIO(out);
             CloseUtils.closeIO(bis);
@@ -340,13 +350,13 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     }
 
 
-    enum DownLoadErrorMsg {
+    enum DownLoadMsg {
 
         NETWORK_ERROR_CONNECTION(400), NETWORK_ERROR_STATUS_CODE(401), STORAGE_ERROR(402), TIME_OUT(403), USER_CANCEL(404), SUCCESSFULL(200);
 
         int CODE;
 
-        DownLoadErrorMsg(int e) {
+        DownLoadMsg(int e) {
             this.CODE = e;
         }
 
@@ -357,19 +367,19 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
                 case 400:
-                    return "网络连接出错";
+                    return "Network connection error";
                 case 401:
-                    return "连接状态码出错 ， 非200 或者 非206";
+                    return "Connection status code error, non-200 or non 206";
                 case 402:
-                    return "内存空间不足";
+                    return "Insufficient memory space";
                 case 403:
-                    return "下载时间超时";
+                    return "Download time is overtime";
                 case 404:
-                    return "用户取消下载";
+                    return "The user canceled the download";
                 case 200:
-                    return "下载成功";
+                    return "Download successful";
                 default:
-                    return "未知异常";
+                    return "Unknown exception";
 
             }
         }
@@ -418,6 +428,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
     }
+
 
 
 }

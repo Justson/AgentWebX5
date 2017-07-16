@@ -138,6 +138,11 @@ public class Notity {
     }
 
 
+    public void setContentText(String text){
+
+        cBuilder.setContentText(text);
+    }
+
     /**
      * 根据id清除通知
      */

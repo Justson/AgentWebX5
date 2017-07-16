@@ -58,7 +58,7 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
 //            }
 //        }
 
-//        mWebSettings.setRenderPriority(android.webkit.WebSettings.RenderPriority.HIGH);
+        mWebSettings.setRenderPriority(com.tencent.smtt.sdk.WebSettings.RenderPriority.HIGH);
         mWebSettings.setTextZoom(100);
         mWebSettings.setDatabaseEnabled(true);
         mWebSettings.setAppCacheEnabled(true);
