@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alipay.sdk.app.PayTask;
-import com.alipay.sdk.util.H5PayResultModel;
 import com.just.agentwebX5.AgentWeb;
 import com.just.agentwebX5.ChromeClientCallbackManager;
 import com.just.agentwebX5.DownLoadResultListener;
@@ -160,8 +158,9 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
                 return true;
             else if(url.startsWith("youku"))
                 return true;
-//            else if(isAlipay(view,url))
+//            else if(isAlipay(view,url))  //不需要，defaultWebClient内部会自动处理
 //                return true;
+
 
 
             return false;
@@ -203,33 +202,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
         pageNavigator(View.GONE);
     }
 
-    private boolean isAlipay(final WebView view, String url){
 
-        final PayTask task = new PayTask(getActivity());
-        final String ex = task.fetchOrderInfoFromH5PayUrl(url);
-        LogUtils.i("Info","alipay:"+ex);
-        if (!TextUtils.isEmpty(ex)) {
-            System.out.println("paytask:::::" + url);
-            new Thread(new Runnable() {
-                public void run() {
-                    System.out.println("payTask:::" + ex);
-                    final H5PayResultModel result = task.h5Pay(ex, true);
-                    if (!TextUtils.isEmpty(result.getReturnUrl())) {
-                        getActivity().runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                view.loadUrl(result.getReturnUrl());
-                            }
-                        });
-                    }
-                }
-            }).start();
-
-            return true;
-        }
-        return false;
-    }
 
     private void pageNavigator(int tag) {
 
