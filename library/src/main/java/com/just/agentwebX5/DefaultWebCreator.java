@@ -20,7 +20,7 @@ import com.tencent.smtt.sdk.WebView;
  * <b>@公司：</b> <br>
  * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
  * <b>@描述</b><br>
- *     source CODE  https://github.com/Justson/AgentWebX5
+ *  source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class DefaultWebCreator implements WebCreator {
@@ -165,7 +165,7 @@ public class DefaultWebCreator implements WebCreator {
             mWebView = this.mWebView;
             AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
         } else {
-            mWebView = new X5WebView(mActivity);
+            mWebView = new WebView(mActivity);
             AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_DEFAULT_TYPE;
         }
 

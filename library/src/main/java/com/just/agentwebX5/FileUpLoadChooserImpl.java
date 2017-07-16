@@ -62,9 +62,9 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
 
     @Override
     public void openFileChooser() {
-        if (isL && mFileChooserParams != null)
+        /*if (isL && mFileChooserParams != null)
             mActivity.startActivityForResult(mFileChooserParams.createIntent(), REQUEST_CODE);
-        else
+        else*/
             this.openRealFileChooser();
     }
 

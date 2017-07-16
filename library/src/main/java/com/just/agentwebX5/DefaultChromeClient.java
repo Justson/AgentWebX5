@@ -282,7 +282,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-        LogUtils.i("Infoss", "openFileChooser>=5.0");
+        LogUtils.i("Info", "openFileChooser>=5.0");
         if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onShowFileChooser", ChromePath + ".onShowFileChooser", WebView.class, ValueCallback.class, FileChooserParams.class)) {
 
             return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
@@ -301,6 +301,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
         this.mIFileUploadChooser = mIFileUploadChooser = new FileUpLoadChooserImpl(webView, mActivity, filePathCallback, fileChooserParams);
         mIFileUploadChooser.openFileChooser();
 
+        LogUtils.i("Info","mIFileUploadChooser:"+this.mIFileUploadChooser);
     }
 
     // Android  >= 4.1
@@ -348,7 +349,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
 
     @Override
     public IFileUploadChooser pop() {
-        Log.i("Info", "offer:" + mIFileUploadChooser);
+        LogUtils.i("Info", "mIFileUploadChooser offer:" + mIFileUploadChooser);
         IFileUploadChooser mIFileUploadChooser = this.mIFileUploadChooser;
         this.mIFileUploadChooser = null;
         return mIFileUploadChooser;

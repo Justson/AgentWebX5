@@ -34,17 +34,27 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
     @Override
     public WebSettings toSetting(WebView webView) {
 
-        mWebSettings = webView.getSettings();
+
+
+        this.mWebSettings = webView.getSettings();
+
+        mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        // webSetting.setLoadWithOverviewMode(true);
+        // webSetting.setDatabaseEnabled(true);
+        // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
+        mWebSettings.setPluginState(com.tencent.smtt.sdk.WebSettings.PluginState.ON_DEMAND);
+        // webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        mWebSettings.setCacheMode(com.tencent.smtt.sdk.WebSettings.LOAD_NO_CACHE);
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setSupportZoom(true);
         mWebSettings.setBuiltInZoomControls(false);
         mWebSettings.setSavePassword(false);
         if (AgentWebUtils.checkNetwork(webView.getContext())) {
             //根据cache-control获取数据。
-            mWebSettings.setCacheMode(android.webkit.WebSettings.LOAD_DEFAULT);
+            mWebSettings.setCacheMode(com.tencent.smtt.sdk.WebSettings.LOAD_DEFAULT);
         } else {
             //没网，则从本地获取，即离线加载
-            mWebSettings.setCacheMode(android.webkit.WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            mWebSettings.setCacheMode(com.tencent.smtt.sdk.WebSettings.LOAD_CACHE_ELSE_NETWORK);
         }
 
 //        if(Build.VERSION.SDK_INT >= 21){
@@ -123,11 +133,5 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
         return this;
     }
 
-    /*static class InnerSettingsHolder {
-        private static final WebDefaultSettingsManager target = new WebDefaultSettingsManager();
 
-        private static WebDefaultSettingsManager getHolder() {
-            return target;
-        }
-    }*/
 }

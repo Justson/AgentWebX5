@@ -185,6 +185,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.i("Info","onActivityResult -- >callback:"+requestCode+"   0x254:"+0x254);
 //        Log.i("Info","onActivityResult result");
         mAgentWeb.uploadFileResult(requestCode, resultCode, data);
     }
