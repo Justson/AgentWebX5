@@ -13,6 +13,7 @@ import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by cenxiaozhong on 2017/6/10.
+ * source code https://github.com/Justson/AgentWebX5
  */
 
 public class VideoImpl implements IVideo, EventInterceptor {

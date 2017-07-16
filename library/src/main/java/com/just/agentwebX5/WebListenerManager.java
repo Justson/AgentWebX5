@@ -8,7 +8,7 @@ import com.tencent.smtt.sdk.WebViewClient;
 
 /**
  * Created by cenxiaozhong on 2017/5/13.
- * source CODE  https://github.com/Justson/AgentWeb
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public interface WebListenerManager {

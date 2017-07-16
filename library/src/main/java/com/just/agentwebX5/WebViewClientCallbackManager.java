@@ -7,6 +7,7 @@ import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by cenxiaozhong on 2017/5/28.
+ * source code https://github.com/Justson/AgentWebX5
  */
 
 public class WebViewClientCallbackManager {

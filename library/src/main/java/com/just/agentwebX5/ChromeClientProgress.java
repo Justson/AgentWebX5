@@ -12,7 +12,7 @@ import com.tencent.smtt.sdk.WebView;
  * <b>@公司：</b> 宝诺科技<br>
  * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
  * <b>@描述</b><br>
- *     source CODE  https://github.com/Justson/AgentWeb
+ *  source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class ChromeClientProgress extends WebChromeClient {

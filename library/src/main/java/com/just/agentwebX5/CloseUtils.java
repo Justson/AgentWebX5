@@ -4,6 +4,7 @@ import java.io.Closeable;
 
 /**
  * Created by cenxiaozhong on 2017/5/24.
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 class CloseUtils {

@@ -15,6 +15,7 @@ import com.tencent.smtt.sdk.WebView;
  * <b>@公司：</b> <br>
  * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
  * <b>@描述</b><br>
+ *     source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class JsEntraceAccessImpl extends BaseJsEntraceAccess {

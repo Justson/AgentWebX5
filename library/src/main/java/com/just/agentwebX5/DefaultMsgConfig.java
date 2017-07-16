@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 /**
  * Created by cenxiaozhong on 2017/7/7.
+ *
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public final class DefaultMsgConfig {

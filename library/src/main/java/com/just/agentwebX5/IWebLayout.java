@@ -8,6 +8,7 @@ import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by cenxiaozhong on 2017/7/1.
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public interface IWebLayout<T extends WebView,V extends ViewGroup> {

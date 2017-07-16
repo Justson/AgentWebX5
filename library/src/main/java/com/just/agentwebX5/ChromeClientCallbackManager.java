@@ -6,7 +6,7 @@ import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by cenxiaozhong on 2017/5/14.
- * source CODE  https://github.com/Justson/AgentWeb
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class ChromeClientCallbackManager {

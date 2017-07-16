@@ -1,13 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
-publish{
-    userOrg = 'lcodecorex'
-    groupId = 'com.lcodecorex'
-    artifactId = 'tkrefreshlayout'
-    publishVersion = '1.0.7'
-    website = 'https://github.com/lcodecorex/TwinklingRefreshLayout/'
-}
 
 android {
     compileSdkVersion 25

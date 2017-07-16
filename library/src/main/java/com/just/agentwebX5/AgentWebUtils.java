@@ -65,7 +65,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * <b>@公司：</b><br>
  * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
  * <b>@描述</b><br>
- * source CODE  https://github.com/Justson/AgentWeb
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class AgentWebUtils {

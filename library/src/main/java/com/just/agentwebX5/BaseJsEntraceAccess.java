@@ -9,6 +9,7 @@ import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by cenxiaozhong on 2017/5/26.
+ * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public abstract class BaseJsEntraceAccess implements JsEntraceAccess {

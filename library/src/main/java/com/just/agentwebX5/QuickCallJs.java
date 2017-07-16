@@ -6,6 +6,7 @@ import android.webkit.ValueCallback;
 
 /**
  * Created by cenxiaozhong on 2017/5/29.
+ * source code https://github.com/Justson/AgentWebX5
  */
 
 public interface QuickCallJs {

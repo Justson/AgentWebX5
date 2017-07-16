@@ -1,6 +1,7 @@
 package com.just.agentwebX5;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.Nullable;
 
@@ -11,7 +12,7 @@ import com.tencent.smtt.sdk.ValueCallback;
 
 /**
  * Created by cenxiaozhong on 2017/5/14.
- * https://github.com/Justson/AgentWeb
+ * https://github.com/Justson/AgentWebX5
  */
 
 public class AgentWebConfig {
@@ -158,14 +159,14 @@ public class AgentWebConfig {
             CookieSyncManager.getInstance().sync();
             return;
         }
-        new Thread(new Runnable() {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
 
                 CookieManager.getInstance().flush();
 
             }
-        }).start();
+        });
     }
 
 }
