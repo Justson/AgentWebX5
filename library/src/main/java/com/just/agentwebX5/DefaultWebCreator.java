@@ -164,7 +164,7 @@ public class DefaultWebCreator implements WebCreator {
 //            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2);
             mFrameLayout.addView((View) (this.mBaseProgressSpec = (BaseProgressSpec) progressView), progressView.offerLayoutParams());
         }
-        return mFrameLayout;
+        return this.mFrameLayout=mFrameLayout;
 
     }
 

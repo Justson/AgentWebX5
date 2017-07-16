@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,10 +23,19 @@ public class X5WebView extends WebView {
 		 * 防止加载网页时调起系统浏览器
 		 */
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+			Log.i("Info","X5WebView  shouldOverrideUrlLoading:"+url);
+			if(url.startsWith("intent")){
+				return true;
+			}else if(url.startsWith("youku")){
+				return true;
+			}
+
 			view.loadUrl(url);
 			return true;
 		}
 	};
+
 
 	@SuppressLint("SetJavaScriptEnabled")
 	public X5WebView(Context arg0, AttributeSet arg1) {
@@ -88,7 +98,8 @@ public class X5WebView extends WebView {
 	}
 
 	public X5WebView(Context arg0) {
-		super(arg0);
+		//super(arg0);
+		this(arg0,null);
 		setBackgroundColor(85621);
 	}
 

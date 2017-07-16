@@ -3,7 +3,6 @@ package com.just.agentwebX5;
 
 import android.os.Build;
 import android.util.Log;
-import android.view.View;
 
 import com.tencent.smtt.sdk.DownloadListener;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -13,12 +12,12 @@ import com.tencent.smtt.sdk.WebViewClient;
 
 /**
  * <b>@项目名：</b> agentweb<br>
- * <b>@包名：</b>com.just.library<br>
+ * <b>@包名：</b><br>
  * <b>@创建者：</b> cxz --  just<br>
  * <b>@创建时间：</b> &{DATE}<br>
  * <b>@公司：</b><br>
  * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
- * <b>@描述:source CODE  https://github.com/Justson/AgentWeb</b><br>
+ * <b>@描述:source CODE  https://github.com/Justson/AgentWebX5</b><br>
  */
 
 public class WebDefaultSettingsManager implements WebSettings ,WebListenerManager {
@@ -48,16 +47,16 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
             mWebSettings.setCacheMode(android.webkit.WebSettings.LOAD_CACHE_ELSE_NETWORK);
         }
 
-        if(Build.VERSION.SDK_INT >= 21){
-            mWebSettings.setMixedContentMode(0);
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }else if(Build.VERSION.SDK_INT >= 19){
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }else if(Build.VERSION.SDK_INT < 19){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            }
-        }
+//        if(Build.VERSION.SDK_INT >= 21){
+//            mWebSettings.setMixedContentMode(0);
+//            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//        }else if(Build.VERSION.SDK_INT >= 19){
+//            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+//        }else if(Build.VERSION.SDK_INT < 19){
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//            }
+//        }
 
 //        mWebSettings.setRenderPriority(android.webkit.WebSettings.RenderPriority.HIGH);
         mWebSettings.setTextZoom(100);
@@ -95,7 +94,6 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
 
         //缓存文件最大值
         mWebSettings.setAppCacheMaxSize(Long.MAX_VALUE);
-
 
         return this;
     }

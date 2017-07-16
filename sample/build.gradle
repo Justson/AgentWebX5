@@ -26,7 +26,7 @@ android {
         }
     }
 
-    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+
     lintOptions{
         abortOnError false
     }
@@ -35,11 +35,7 @@ android {
         abortOnError false;
     }
 
-//        sourceSets {
-//            main{
-//                jniLibs.srcDirs = ['libs']
-//            }
-//        }
+
 }
 
 dependencies {
@@ -55,5 +51,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':library')
     compile files('libs/alipaySingle-20170510.jar')
-    compile 'us.feras.mdv:markdownview:1.1.0'
 }
