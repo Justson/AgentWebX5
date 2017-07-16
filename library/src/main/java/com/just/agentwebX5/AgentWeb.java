@@ -78,7 +78,7 @@ public class AgentWeb {
         this.mActivity = agentBuilder.mActivity;
         this.mViewGroup = agentBuilder.mViewGroup;
         this.enableProgress = agentBuilder.enableProgress;
-        mWebCreator = agentBuilder.mWebCreator == null ? configWebCreator(agentBuilder.v, agentBuilder.index, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mIndicatorColorWithHeight, agentBuilder.mWebView) : agentBuilder.mWebCreator;
+        mWebCreator = agentBuilder.mWebCreator == null ? configWebCreator(agentBuilder.v, agentBuilder.index, agentBuilder.mLayoutParams, agentBuilder.mIndicatorColor, agentBuilder.mIndicatorColorWithHeight, agentBuilder.mWebView,agentBuilder.mWebLayout) : agentBuilder.mWebCreator;
         mIndicatorController = agentBuilder.mIndicatorController;
         this.mWebChromeClient = agentBuilder.mWebChromeClient;
         this.mWebViewClient = agentBuilder.mWebViewClient;
@@ -109,7 +109,7 @@ public class AgentWeb {
         this.mViewGroup = agentBuilderFragment.mViewGroup;
         this.mIEventHandler = agentBuilderFragment.mIEventHandler;
         this.enableProgress = agentBuilderFragment.enableProgress;
-        mWebCreator = agentBuilderFragment.mWebCreator == null ? configWebCreator(agentBuilderFragment.v, agentBuilderFragment.index, agentBuilderFragment.mLayoutParams, agentBuilderFragment.mIndicatorColor, agentBuilderFragment.height_dp, agentBuilderFragment.mWebView) : agentBuilderFragment.mWebCreator;
+        mWebCreator = agentBuilderFragment.mWebCreator == null ? configWebCreator(agentBuilderFragment.v, agentBuilderFragment.index, agentBuilderFragment.mLayoutParams, agentBuilderFragment.mIndicatorColor, agentBuilderFragment.height_dp, agentBuilderFragment.mWebView,agentBuilderFragment.webLayout) : agentBuilderFragment.mWebCreator;
         mIndicatorController = agentBuilderFragment.mIndicatorController;
         this.mWebChromeClient = agentBuilderFragment.mWebChromeClient;
         this.mWebViewClient = agentBuilderFragment.mWebViewClient;
@@ -167,14 +167,14 @@ public class AgentWeb {
 
     }
 
-    private WebCreator configWebCreator(BaseIndicatorView progressView, int index, ViewGroup.LayoutParams lp, int mIndicatorColor, int height_dp, WebView webView) {
+    private WebCreator configWebCreator(BaseIndicatorView progressView, int index, ViewGroup.LayoutParams lp, int mIndicatorColor, int height_dp, WebView webView,IWebLayout webLayout) {
 
         if (progressView != null && enableProgress) {
-            return new DefaultWebCreator(mActivity, mViewGroup, lp, index, progressView, webView);
+            return new DefaultWebCreator(mActivity, mViewGroup, lp, index, progressView, webView,webLayout);
         } else {
             return enableProgress ?
-                    new DefaultWebCreator(mActivity, mViewGroup, lp, index, mIndicatorColor, height_dp, webView)
-                    : new DefaultWebCreator(mActivity, mViewGroup, lp, index, webView);
+                    new DefaultWebCreator(mActivity, mViewGroup, lp, index, mIndicatorColor, height_dp, webView,webLayout)
+                    : new DefaultWebCreator(mActivity, mViewGroup, lp, index, webView,webLayout);
         }
     }
 
@@ -412,6 +412,7 @@ public class AgentWeb {
         private ChromeClientCallbackManager mChromeClientCallbackManager = new ChromeClientCallbackManager();
 
         private Map<String, String> headers = null;
+        private IWebLayout mWebLayout;
 
 
         private ArrayMap<String, Object> mJavaObject = null;
@@ -620,6 +621,11 @@ public class AgentWeb {
             return this;
         }
 
+        public CommonAgentBuilder setWebLayout(@NonNull IWebLayout webLayout) {
+            this.mAgentBuilder.mWebLayout = webLayout;
+            return this;
+        }
+
         public CommonAgentBuilder additionalHttpHeader(String k, String v) {
             this.mAgentBuilder.addHeader(k, v);
             return this;
@@ -706,6 +712,7 @@ public class AgentWeb {
         private WebViewClientCallbackManager mWebViewClientCallbackManager = new WebViewClientCallbackManager();
         private boolean webClientHelper =true;
         private List<DownLoadResultListener> mDownLoadResultListeners=null;
+        private IWebLayout webLayout;
 
 
         public AgentBuilderFragment(@NonNull Activity activity, @NonNull Fragment fragment) {
@@ -852,6 +859,10 @@ public class AgentWeb {
         public CommonBuilderForFragment additionalHttpHeaders(String k, String v) {
             this.mAgentBuilderFragment.addHeader(k, v);
 
+            return this;
+        }
+        public CommonBuilderForFragment setWebLayout(@Nullable IWebLayout iWebLayout) {
+            this.mAgentBuilderFragment.webLayout = iWebLayout;
             return this;
         }
 

@@ -1,6 +1,7 @@
 package com.just.agentwebX5;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import com.tencent.smtt.sdk.WebView;
  * <b>@公司：</b> <br>
  * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
  * <b>@描述</b><br>
+ *     source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class DefaultWebCreator implements WebCreator {
@@ -27,18 +29,15 @@ public class DefaultWebCreator implements WebCreator {
     private ViewGroup mViewGroup;
     private boolean isNeedDefaultProgress;
     private int index;
-
     private BaseIndicatorView progressView;
     private ViewGroup.LayoutParams mLayoutParams = null;
     private int color = -1;
-
     private int height_dp;
-
-
+    private IWebLayout mIWebLayout;
     private boolean isCreated=false;
 
 
-    DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, int color, int height_dp, WebView webView) {
+    protected DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, int color, int height_dp, WebView webView,IWebLayout webLayout) {
         this.mActivity = activity;
         this.mViewGroup = viewGroup;
         this.isNeedDefaultProgress = true;
@@ -47,18 +46,20 @@ public class DefaultWebCreator implements WebCreator {
         this.mLayoutParams = lp;
         this.height_dp = height_dp;
         this.mWebView = webView;
+        this.mIWebLayout=webLayout;
     }
 
-    DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, @Nullable WebView webView) {
+    protected DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, @Nullable WebView webView,IWebLayout webLayout) {
         this.mActivity = activity;
         this.mViewGroup = viewGroup;
         this.isNeedDefaultProgress = false;
         this.index = index;
         this.mLayoutParams = lp;
         this.mWebView = webView;
+        this.mIWebLayout=webLayout;
     }
 
-    DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, BaseIndicatorView progressView, WebView webView) {
+    protected DefaultWebCreator(@NonNull Activity activity, @Nullable ViewGroup viewGroup, ViewGroup.LayoutParams lp, int index, BaseIndicatorView progressView, WebView webView,IWebLayout webLayout) {
         this.mActivity = activity;
         this.mViewGroup = viewGroup;
         this.isNeedDefaultProgress = false;
@@ -66,6 +67,7 @@ public class DefaultWebCreator implements WebCreator {
         this.mLayoutParams = lp;
         this.progressView = progressView;
         this.mWebView = webView;
+        this.mIWebLayout=webLayout;
     }
 
     private WebView mWebView = null;
@@ -133,22 +135,12 @@ public class DefaultWebCreator implements WebCreator {
         Activity mActivity = this.mActivity;
 
         FrameLayout mFrameLayout = new FrameLayout(mActivity);
+        mFrameLayout.setBackgroundColor(Color.WHITE);
         com.tencent.smtt.sdk.WebView mWebView = null;
-        if (this.mWebView != null) {
-            mWebView = this.mWebView;
-            AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
-        } else {
-            mWebView = new X5WebView(mActivity);
-            AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_DEFAULT_TYPE;
-        }
-
-
+        View target=mIWebLayout==null?(this.mWebView= (WebView) web()):webLayout();
         FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(-1, -1);
-        mFrameLayout.addView(this.mWebView = mWebView, mLayoutParams);
-
-
+        mFrameLayout.addView(target, mLayoutParams);
         if (isNeedDefaultProgress) {
-
             FrameLayout.LayoutParams lp = null;
             WebProgress mWebProgress = new WebProgress(mActivity);
             if (height_dp > 0)
@@ -160,11 +152,38 @@ public class DefaultWebCreator implements WebCreator {
             lp.gravity = Gravity.TOP;
             mFrameLayout.addView((View) (this.mBaseProgressSpec = mWebProgress), lp);
         } else if (!isNeedDefaultProgress && progressView != null) {
-
 //            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2);
             mFrameLayout.addView((View) (this.mBaseProgressSpec = (BaseProgressSpec) progressView), progressView.offerLayoutParams());
         }
         return this.mFrameLayout=mFrameLayout;
+
+    }
+
+    private WebView web() {
+        WebView mWebView = null;
+        if (this.mWebView != null) {
+            mWebView = this.mWebView;
+            AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
+        } else {
+            mWebView = new X5WebView(mActivity);
+            AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_DEFAULT_TYPE;
+        }
+
+        return mWebView;
+    }
+
+    private View webLayout(){
+        WebView mWebView = null;
+        if((mWebView=mIWebLayout.getWeb())==null){
+            mWebView=web();
+            mIWebLayout.getLayout().addView(mWebView,-1,-1);
+            LogUtils.i("Info","add webview");
+
+        }else{
+            AgentWebConfig.WEBVIEW_TYPE=AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
+        }
+        this.mWebView=mWebView;
+        return mIWebLayout.getLayout();
 
     }
 

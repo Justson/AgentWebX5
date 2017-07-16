@@ -51,4 +51,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':library')
     compile files('libs/alipaySingle-20170510.jar')
+    compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
 }
