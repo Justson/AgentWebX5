@@ -2,7 +2,7 @@
 
 ## AgentWebX5 介绍
 
-基于腾讯X5内核版的 AgentWeb ，简单易用 ， 带有进度条 、 支持文件上传 、 下载 、 简化 Javascript 通信 、 链式调用  、性能更优 。更多使用请参照上面的 sample 。 
+基于腾讯X5内核版的 [AgentWeb](https://github.com/Justson/AgentWeb) ，简单易用 ， 带有进度条 、 支持文件上传 、 下载 、 简化 Javascript 通信 、 链式调用  、性能更优 。更多使用请参照上面的 sample 。 
 
 ## AgentWebX5 功能
 1. 支持进度条以及自定义进度条
@@ -44,7 +44,7 @@
 
 ## 使用
 
-1. 下载腾讯X5内核最新 SDK 导入项目中并依赖。
+1. 下载腾讯X5内核最新 [SDK](https://x5.tencent.com/tbs/) 导入项目中并依赖。
 2. 引入 `AgentWebX5`
 3. 需要全局初始化X5内核 `QbSdk.initX5Environment(getApplicationContext(),  cb);`
 
