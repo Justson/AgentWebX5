@@ -38,14 +38,14 @@ import java.util.Map;
  * https://github.com/Justson/AgentWeb
  * author just -- cxz
  */
-public class AgentWeb {
+public class AgentWebX5 {
 
-    private static final String TAG=AgentWeb.class.getSimpleName();
+    private static final String TAG=AgentWebX5.class.getSimpleName();
     private Activity mActivity;
     private ViewGroup mViewGroup;
     private WebCreator mWebCreator;
     private WebSettings mWebSettings;
-    private AgentWeb mAgentWeb = null;
+    private AgentWebX5 mAgentWebX5 = null;
     private IndicatorController mIndicatorController;
     private WebChromeClient mWebChromeClient;
     private WebViewClient mWebViewClient;
@@ -74,7 +74,7 @@ public class AgentWeb {
 
 
 
-    private AgentWeb(AgentBuilder agentBuilder) {
+    private AgentWebX5(AgentBuilder agentBuilder) {
         this.mActivity = agentBuilder.mActivity;
         this.mViewGroup = agentBuilder.mViewGroup;
         this.enableProgress = agentBuilder.enableProgress;
@@ -82,7 +82,7 @@ public class AgentWeb {
         mIndicatorController = agentBuilder.mIndicatorController;
         this.mWebChromeClient = agentBuilder.mWebChromeClient;
         this.mWebViewClient = agentBuilder.mWebViewClient;
-        mAgentWeb = this;
+        mAgentWebX5 = this;
         this.mWebSettings = agentBuilder.mWebSettings;
         this.mIEventHandler = agentBuilder.mIEventHandler;
         TAG_TARGET = ACTIVITY_TAG;
@@ -94,7 +94,7 @@ public class AgentWeb {
         this.mSecurityType = agentBuilder.mSecurityType;
         this.mILoader = new LoaderImpl(mWebCreator.create().get(), agentBuilder.headers);
         this.mWebLifeCycle = new DefaultWebLifeCycleImpl(mWebCreator.get());
-        mWebSecurityController = new WebSecurityControllerImpl(mWebCreator.get(), this.mAgentWeb.mJavaObjects, mSecurityType);
+        mWebSecurityController = new WebSecurityControllerImpl(mWebCreator.get(), this.mAgentWebX5.mJavaObjects, mSecurityType);
         this.webClientHelper=agentBuilder.webclientHelper;
 
         init();
@@ -102,7 +102,7 @@ public class AgentWeb {
     }
 
 
-    private AgentWeb(AgentBuilderFragment agentBuilderFragment) {
+    private AgentWebX5(AgentBuilderFragment agentBuilderFragment) {
         TAG_TARGET = FRAGMENT_TAG;
         this.mActivity = agentBuilderFragment.mActivity;
         this.mFragment = agentBuilderFragment.mFragment;
@@ -113,7 +113,7 @@ public class AgentWeb {
         mIndicatorController = agentBuilderFragment.mIndicatorController;
         this.mWebChromeClient = agentBuilderFragment.mWebChromeClient;
         this.mWebViewClient = agentBuilderFragment.mWebViewClient;
-        mAgentWeb = this;
+        mAgentWebX5 = this;
         this.mWebSettings = agentBuilderFragment.mWebSettings;
         if (agentBuilderFragment.mJavaObject != null && agentBuilderFragment.mJavaObject.isEmpty())
             this.mJavaObjects.putAll((Map<? extends String, ?>) agentBuilderFragment.mJavaObject);
@@ -122,7 +122,7 @@ public class AgentWeb {
         this.mSecurityType = agentBuilderFragment.mSecurityType;
         this.mILoader = new LoaderImpl(mWebCreator.create().get(), agentBuilderFragment.additionalHttpHeaders);
         this.mWebLifeCycle = new DefaultWebLifeCycleImpl(mWebCreator.get());
-        mWebSecurityController = new WebSecurityControllerImpl(mWebCreator.get(), this.mAgentWeb.mJavaObjects, this.mSecurityType);
+        mWebSecurityController = new WebSecurityControllerImpl(mWebCreator.get(), this.mAgentWebX5.mJavaObjects, this.mSecurityType);
         this.webClientHelper=agentBuilderFragment.webClientHelper;
 
         init();
@@ -197,7 +197,7 @@ public class AgentWeb {
     }
 
 
-    public AgentWeb clearWebCache() {
+    public AgentWebX5 clearWebCache() {
 
         AgentWebUtils.clearWebViewAllCache(mActivity);
         return this;
@@ -249,7 +249,7 @@ public class AgentWeb {
         return mIEventHandler.back();
     }
 
-    /*public static AgentWeb withCreatorWeb(WebCreator creatorWeb) {
+    /*public static AgentWebX5 withCreatorWeb(WebCreator creatorWeb) {
         return new AgentBuilder(creatorWeb).buildAgentWeb();
     }*/
 
@@ -272,7 +272,7 @@ public class AgentWeb {
     }
 
 
-    private AgentWeb ready() {
+    private AgentWebX5 ready() {
 
         AgentWebConfig.initCookiesManager(mActivity.getApplicationContext());
         WebSettings mWebSettings = this.mWebSettings;
@@ -349,7 +349,7 @@ public class AgentWeb {
     }
 
 
-    private AgentWeb go(String url) {
+    private AgentWebX5 go(String url) {
         this.getLoader().loadUrl(url);
         return this;
     }
@@ -492,7 +492,7 @@ public class AgentWeb {
 
 
         private PreAgentWeb buildAgentWeb() {
-            return new PreAgentWeb(HookManager.hookAgentWeb(new AgentWeb(this), this));
+            return new PreAgentWeb(HookManager.hookAgentWeb(new AgentWebX5(this), this));
         }
 
         private IEventHandler mIEventHandler;
@@ -504,28 +504,28 @@ public class AgentWeb {
     }
 
     public static class PreAgentWeb {
-        private AgentWeb mAgentWeb;
+        private AgentWebX5 mAgentWebX5;
         private boolean isReady = false;
 
-        PreAgentWeb(AgentWeb agentWeb) {
-            this.mAgentWeb = agentWeb;
+        PreAgentWeb(AgentWebX5 agentWebX5) {
+            this.mAgentWebX5 = agentWebX5;
         }
 
 
         public PreAgentWeb ready() {
             if (!isReady) {
-                mAgentWeb.ready();
+                mAgentWebX5.ready();
                 isReady = true;
             }
             return this;
         }
 
-        public AgentWeb go(@Nullable String url) {
+        public AgentWebX5 go(@Nullable String url) {
             if (!isReady) {
 //                throw new IllegalStateException(" please call ready before go  to finish all webview settings");  //i want to do this , but i cannot;
                 ready();
             }
-            return mAgentWeb.go(url);
+            return mAgentWebX5.go(url);
         }
 
 
@@ -729,7 +729,7 @@ public class AgentWeb {
         private PreAgentWeb buildAgentWeb() {
             if (this.mViewGroup == null)
                 throw new NullPointerException("ViewGroup is null,please check you params");
-            return new PreAgentWeb(HookManager.hookAgentWeb(new AgentWeb(this), this));
+            return new PreAgentWeb(HookManager.hookAgentWeb(new AgentWebX5(this), this));
         }
 
         private void addJavaObject(String key, Object o) {

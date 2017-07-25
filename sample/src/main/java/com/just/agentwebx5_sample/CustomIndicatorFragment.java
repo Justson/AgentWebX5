@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.just.agentwebX5.AgentWeb;
+import com.just.agentwebX5.AgentWebX5;
 import com.just.agentwebX5.WebDefaultSettingsManager;
 
 /**
@@ -37,13 +37,13 @@ public class CustomIndicatorFragment extends AgentWebFragment {
         mProgressBar.setBackground(this.getResources().getDrawable(R.drawable.indicator_shape));
         mCommonIndicator.addView(mProgressBar,lp);
 
-        this.mAgentWeb = AgentWeb.with( this)//
+        this.mAgentWebX5 = AgentWebX5.with( this)//
                 .setAgentWebParent((ViewGroup) view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//
                 .setCustomIndicator(mCommonIndicator)
                 .setWebSettings(WebDefaultSettingsManager.getInstance())//
                 .setWebViewClient(mWebViewClient)
                 .setReceivedTitleCallback(mCallback)
-                .setSecurityType(AgentWeb.SecurityType.strict)
+                .setSecurityType(AgentWebX5.SecurityType.strict)
                 .createAgentWeb()//
                 .ready()//
                 .go(getUrl());

@@ -43,13 +43,13 @@ public class JsAgentWebFragment extends AgentWebFragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        Log.i("Info","add android:"+mAgentWeb);
-        if(mAgentWeb!=null){
-            mAgentWeb.getJsInterfaceHolder().addJavaObject("android",new AndroidInterface(mAgentWeb,this.getActivity()));
+        Log.i("Info","add android:"+ mAgentWebX5);
+        if(mAgentWebX5 !=null){
+            mAgentWebX5.getJsInterfaceHolder().addJavaObject("android",new AndroidInterface(mAgentWebX5,this.getActivity()));
 
         }
 //        String p="\"hello\""+","+"\" js\"";
-//        mAgentWeb.getWebCreator().get().loadUrl("javascript:callByAndroid("+"\"hello\""+","+"\" js\""+")");
+//        mAgentWebX5.getWebCreator().get().loadUrl("javascript:callByAndroid("+"\"hello\""+","+"\" js\""+")");
 
         view.findViewById(R.id.one).setOnClickListener(mOnClickListener);
         view.findViewById(R.id.two).setOnClickListener(mOnClickListener);
@@ -68,15 +68,15 @@ public class JsAgentWebFragment extends AgentWebFragment {
             switch (v.getId()){
 
                 case R.id.one:
-                    mAgentWeb.getJsEntraceAccess().quickCallJs("callByAndroid");
+                    mAgentWebX5.getJsEntraceAccess().quickCallJs("callByAndroid");
                     break;
 
                 case R.id.two:
-                    mAgentWeb.getJsEntraceAccess().quickCallJs("callByAndroidParam","Hello ! Agentweb");
+                    mAgentWebX5.getJsEntraceAccess().quickCallJs("callByAndroidParam","Hello ! Agentweb");
                     break;
 
                 case R.id.three:
-                    mAgentWeb.getJsEntraceAccess().quickCallJs("callByAndroidMoreParams", new ValueCallback<String>() {
+                    mAgentWebX5.getJsEntraceAccess().quickCallJs("callByAndroidMoreParams", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
                             Log.i("Info","value:"+value);
@@ -84,7 +84,7 @@ public class JsAgentWebFragment extends AgentWebFragment {
                     },getJson(),"say:", " Hello! Agentweb");
                     break;
                 case R.id.four:
-                    mAgentWeb.getJsEntraceAccess().quickCallJs("callByAndroidInteraction","你好Js");
+                    mAgentWebX5.getJsEntraceAccess().quickCallJs("callByAndroidInteraction","你好Js");
                     break;
             }
 

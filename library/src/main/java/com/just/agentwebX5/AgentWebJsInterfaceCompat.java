@@ -9,10 +9,10 @@ import android.webkit.JavascriptInterface;
 
 public class AgentWebJsInterfaceCompat implements AgentWebCompat ,FileUploadPop<IFileUploadChooser> {
 
-    private AgentWeb mAgentWeb;
+    private AgentWebX5 mAgentWebX5;
     private Activity mActivity;
-     AgentWebJsInterfaceCompat(AgentWeb agentWeb,Activity activity){
-        this.mAgentWeb=agentWeb;
+     AgentWebJsInterfaceCompat(AgentWebX5 agentWebX5, Activity activity){
+        this.mAgentWebX5 = agentWebX5;
          this.mActivity=activity;
     }
 
@@ -27,9 +27,9 @@ public class AgentWebJsInterfaceCompat implements AgentWebCompat ,FileUploadPop<
 
 //                Log.i("Info","call:"+value);
 //                StringBuilder sb=new StringBuilder().append("javascript:uploadFileResult ( \"").append(value).append("\" ) ");
-                if(mAgentWeb!=null)
-//                    mAgentWeb.getJsEntraceAccess().callJs("javascript:uploadFileResult(" + value + ")");
-                    mAgentWeb.getJsEntraceAccess().quickCallJs("uploadFileResult",value);
+                if(mAgentWebX5 !=null)
+//                    mAgentWebX5.getJsEntraceAccess().callJs("javascript:uploadFileResult(" + value + ")");
+                    mAgentWebX5.getJsEntraceAccess().quickCallJs("uploadFileResult",value);
             }
         });
         mIFileUploadChooser.openFileChooser();

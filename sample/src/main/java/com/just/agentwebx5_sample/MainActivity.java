@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTitleTextView;
 
 
-    public static final String[] datas = new String[]{"Activity 使用 AgentWeb", "Fragment 使用 AgentWeb ", "文件下载", "input标签文件上传", "Js 通信文件上传,兼用Android 4.4Kitkat", "Js 通信","Video 视屏全屏播放", "自定义进度条", "自定义设置","电话 ， 信息 ， 邮件"};
+    public static final String[] datas = new String[]{"Activity 使用 AgentWebX5", "Fragment 使用 AgentWebX5 ", "文件下载", "input标签文件上传", "Js 通信文件上传,兼用Android 4.4Kitkat", "Js 通信","Video 视屏全屏播放", "自定义进度条", "自定义设置","电话 ， 信息 ， 邮件"};
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(Color.WHITE);
         mToolbar.setTitle("");
         mTitleTextView = (TextView) this.findViewById(R.id.toolbar_title);
-        mTitleTextView.setText("AgentWeb 使用指南");
+        mTitleTextView.setText("AgentWebX5 使用指南");
         this.setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null)
             // Enable the Up button

@@ -7,7 +7,7 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
-import com.just.agentwebX5.AgentWeb;
+import com.just.agentwebX5.AgentWebX5;
 
 
 /**
@@ -17,10 +17,10 @@ import com.just.agentwebX5.AgentWeb;
 public class AndroidInterface {
 
 
-    private AgentWeb agent;
+    private AgentWebX5 agent;
     private Context context;
 
-    public AndroidInterface(AgentWeb agent, Context context) {
+    public AndroidInterface(AgentWebX5 agent, Context context) {
         this.agent = agent;
         this.context = context;
     }

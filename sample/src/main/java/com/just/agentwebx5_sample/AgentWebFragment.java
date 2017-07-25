@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.just.agentwebX5.AgentWeb;
+import com.just.agentwebX5.AgentWebX5;
 import com.just.agentwebX5.ChromeClientCallbackManager;
 import com.just.agentwebX5.DownLoadResultListener;
 import com.just.agentwebX5.LogUtils;
@@ -41,7 +41,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
     private View mLineView;
     private ImageView mFinishImageView;
     private TextView mTitleTextView;
-    protected AgentWeb mAgentWeb;
+    protected AgentWebX5 mAgentWebX5;
     public static final String URL_KEY = "url_key";
 
     public static AgentWebFragment getInstance(Bundle bundle) {
@@ -63,14 +63,14 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAgentWeb = AgentWeb.with(this)//
+        mAgentWebX5 = AgentWebX5.with(this)//
                 .setAgentWebParent((ViewGroup) view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//
                 .setIndicatorColorWithHeight(-1, 2)//
                 .setWebSettings(getSettings())//
                 .setWebViewClient(mWebViewClient)
                 .setWebChromeClient(mWebChromeClient)
                 .setReceivedTitleCallback(mCallback)
-                .setSecurityType(AgentWeb.SecurityType.strict)
+                .setSecurityType(AgentWebX5.SecurityType.strict)
                 .addDownLoadResultListener(mDownLoadResultListener)
                 .createAgentWeb()//
                 .ready()//
@@ -80,7 +80,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
 
         initView(view);
 
-//        mAgentWeb.getWebCreator().getGroup().setVisibility(View.GONE);
+//        mAgentWebX5.getWebCreator().getGroup().setVisibility(View.GONE);
 //        X5WebView mX5WebView=new X5WebView(getActivity());
 //        LinearLayout mLinearLayout= (LinearLayout) view;
 //
@@ -186,7 +186,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
 
         Log.i("Info","onActivityResult -- >callback:"+requestCode+"   0x254:"+0x254);
 //        Log.i("Info","onActivityResult result");
-        mAgentWeb.uploadFileResult(requestCode, resultCode, data);
+        mAgentWebX5.uploadFileResult(requestCode, resultCode, data);
     }
 
     protected void initView(View view) {
@@ -220,7 +220,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
 
                 case iv_back:
 
-                    if (!mAgentWeb.back())
+                    if (!mAgentWebX5.back())
                         AgentWebFragment.this.getActivity().finish();
 
                     break;
@@ -233,25 +233,25 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
 
     @Override
     public void onResume() {
-        mAgentWeb.getWebLifeCycle().onResume();
+        mAgentWebX5.getWebLifeCycle().onResume();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        mAgentWeb.getWebLifeCycle().onPause();
+        mAgentWebX5.getWebLifeCycle().onPause();
         super.onPause();
     }
 
     @Override
     public boolean onFragmentKeyDown(int keyCode, KeyEvent event) {
-        return mAgentWeb.handleKeyEvent(keyCode, event);
+        return mAgentWebX5.handleKeyEvent(keyCode, event);
     }
 
     @Override
     public void onDestroyView() {
-        mAgentWeb.getWebLifeCycle().onDestroy();
+        mAgentWebX5.getWebLifeCycle().onDestroy();
         super.onDestroyView();
-        //  mAgentWeb.destroy();
+        //  mAgentWebX5.destroy();
     }
 }

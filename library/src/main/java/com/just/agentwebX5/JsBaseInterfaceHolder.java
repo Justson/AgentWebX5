@@ -13,8 +13,8 @@ import java.lang.reflect.Method;
 
 public abstract class JsBaseInterfaceHolder implements JsInterfaceHolder{
 
-    private AgentWeb.SecurityType mSecurityType;
-    protected JsBaseInterfaceHolder(AgentWeb.SecurityType securityType){
+    private AgentWebX5.SecurityType mSecurityType;
+    protected JsBaseInterfaceHolder(AgentWebX5.SecurityType securityType){
       this.mSecurityType =securityType;
     }
     @Override
@@ -49,7 +49,7 @@ public abstract class JsBaseInterfaceHolder implements JsInterfaceHolder{
     }
 
     protected boolean checkSecurity(){
-        return mSecurityType!= AgentWeb.SecurityType.strict ?true:AgentWebConfig.WEBVIEW_TYPE==AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE?true:Build.VERSION.SDK_INT>Build.VERSION_CODES.JELLY_BEAN_MR1;
+        return mSecurityType!= AgentWebX5.SecurityType.strict ?true:AgentWebConfig.WEBVIEW_TYPE==AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE?true:Build.VERSION.SDK_INT>Build.VERSION_CODES.JELLY_BEAN_MR1;
     }
 
 

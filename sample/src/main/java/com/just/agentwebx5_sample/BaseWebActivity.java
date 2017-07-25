@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.just.agentwebX5.AgentWeb;
+import com.just.agentwebX5.AgentWebX5;
 import com.just.agentwebX5.LogUtils;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
@@ -31,7 +31,7 @@ public class BaseWebActivity extends AppCompatActivity {
 
 
 
-    protected AgentWeb mAgentWeb;
+    protected AgentWebX5 mAgentWebX5;
     private LinearLayout mLinearLayout;
     private Toolbar mToolbar;
     private TextView mTitleTextView;
@@ -65,20 +65,21 @@ public class BaseWebActivity extends AppCompatActivity {
 
         long p = System.currentTimeMillis();
 
-        mAgentWeb = AgentWeb.with(this)//
+        mAgentWebX5 = AgentWebX5.with(this)//
                 .setAgentWebParent(mLinearLayout,new LinearLayout.LayoutParams(-1,-1) )//
                 .useDefaultIndicator()//
                 .defaultProgressBarColor()
                 .setReceivedTitleCallback(mCallback)
                 .setWebChromeClient(mWebChromeClient)
                 .setWebViewClient(mWebViewClient)
-                .setSecutityType(AgentWeb.SecurityType.strict)
+                .setSecutityType(AgentWebX5.SecurityType.strict)
                 .setWebLayout(new WebLayout(this))
                 .createAgentWeb()//
                 .ready()
                 .go(getUrl());
 
-        mAgentWeb.getLoader().loadUrl(getUrl());
+        mAgentWebX5.getLoader().loadUrl(getUrl());
+
 
         long n = System.currentTimeMillis();
         Log.i("Info", "init used time:" + (n - p));
@@ -147,7 +148,7 @@ public class BaseWebActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if (mAgentWeb.handleKeyEvent(keyCode, event)) {
+        if (mAgentWebX5.handleKeyEvent(keyCode, event)) {
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -155,14 +156,14 @@ public class BaseWebActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        mAgentWeb.getWebLifeCycle().onPause();
+        mAgentWebX5.getWebLifeCycle().onPause();
         super.onPause();
 
     }
 
     @Override
     protected void onResume() {
-        mAgentWeb.getWebLifeCycle().onResume();
+        mAgentWebX5.getWebLifeCycle().onResume();
         super.onResume();
     }
 
@@ -170,7 +171,7 @@ public class BaseWebActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         LogUtils.i("Info", "result:" + requestCode + " result:" + resultCode);
-        mAgentWeb.uploadFileResult(requestCode, resultCode, data);
+        mAgentWebX5.uploadFileResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -178,7 +179,7 @@ public class BaseWebActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mAgentWeb.destroy();
-        mAgentWeb.getWebLifeCycle().onDestroy();
+        //mAgentWebX5.destroy();
+        mAgentWebX5.getWebLifeCycle().onDestroy();
     }
 }

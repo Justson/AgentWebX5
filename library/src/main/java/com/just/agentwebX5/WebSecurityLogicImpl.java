@@ -35,9 +35,9 @@ public class WebSecurityLogicImpl implements WebSecurityCheckLogic {
     }
 
     @Override
-    public void dealJsInterface(ArrayMap<String, Object> objects,AgentWeb.SecurityType securityType) {
+    public void dealJsInterface(ArrayMap<String, Object> objects,AgentWebX5.SecurityType securityType) {
 
-        if (securityType== AgentWeb.SecurityType.strict&&AgentWebConfig.WEBVIEW_TYPE!=AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE&&Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (securityType== AgentWebX5.SecurityType.strict&&AgentWebConfig.WEBVIEW_TYPE!=AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE&&Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             objects.clear();
             objects = null;
             System.gc();
