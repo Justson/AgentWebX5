@@ -103,7 +103,7 @@ public class BaseWebActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(com.tencent.smtt.sdk.WebView webView, int i) {
             super.onProgressChanged(webView, i);
-            
+
         }
     };
     public String getUrl(){

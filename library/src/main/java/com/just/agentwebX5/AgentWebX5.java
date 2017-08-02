@@ -2,8 +2,6 @@ package com.just.agentwebX5;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -64,7 +62,6 @@ public class AgentWebX5 {
     private static final int ACTIVITY_TAG = 0;
     private static final int FRAGMENT_TAG = 1;
     private AgentWebJsInterfaceCompat mAgentWebJsInterfaceCompat = null;
-    private Handler mHandler = new Handler(Looper.getMainLooper());
     private JsEntraceAccess mJsEntraceAccess = null;
     private ILoader mILoader = null;
     private WebLifeCycle mWebLifeCycle;
