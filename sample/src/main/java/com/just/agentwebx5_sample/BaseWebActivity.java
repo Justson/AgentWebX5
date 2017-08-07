@@ -63,6 +63,7 @@ public class BaseWebActivity extends AppCompatActivity {
         });
 
 
+
         long p = System.currentTimeMillis();
 
         mAgentWebX5 = AgentWebX5.with(this)//
@@ -153,6 +154,7 @@ public class BaseWebActivity extends AppCompatActivity {
         if (mAgentWebX5.handleKeyEvent(keyCode, event)) {
             return true;
         }
+        
         return super.onKeyDown(keyCode, event);
     }
 
