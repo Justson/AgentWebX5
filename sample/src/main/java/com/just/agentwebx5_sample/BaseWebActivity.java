@@ -154,7 +154,7 @@ public class BaseWebActivity extends AppCompatActivity {
         if (mAgentWebX5.handleKeyEvent(keyCode, event)) {
             return true;
         }
-        
+
         return super.onKeyDown(keyCode, event);
     }
 
