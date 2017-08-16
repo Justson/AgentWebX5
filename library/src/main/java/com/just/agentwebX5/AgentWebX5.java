@@ -246,9 +246,6 @@ public class AgentWebX5 {
         return mIEventHandler.back();
     }
 
-    /*public static AgentWebX5 withCreatorWeb(WebCreator creatorWeb) {
-        return new AgentBuilder(creatorWeb).buildAgentWeb();
-    }*/
 
     public WebCreator getWebCreator() {
         return this.mWebCreator;
@@ -314,11 +311,6 @@ public class AgentWebX5 {
 
     private WebChromeClient getChromeClient() {
         IndicatorController mIndicatorController = (this.mIndicatorController == null) ? IndicatorHandler.getInstance().inJectProgressView(mWebCreator.offer()) : this.mIndicatorController;
-        /*if (mWebChromeClient != null) {
-            return enableProgress ? new WebChromeClientProgressWrapper(mIndicatorController, mWebChromeClient) : mWebChromeClient;
-        } else {
-            return new DefaultChromeClient(this.mActivity, mIndicatorController, this.mChromeClientCallbackManager);
-        }*/
 
         return this.mTargetChromeClient = new DefaultChromeClient(this.mActivity, mIndicatorController, mWebChromeClient, this.mChromeClientCallbackManager,this.mIVideo=getIVideo());
     }
@@ -673,7 +665,6 @@ public class AgentWebX5 {
     }
 
 
-    /*********************为Fragment构建AgentWeb***********************/
 
     public static final class AgentBuilderFragment {
         private Activity mActivity;
