@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
-import android.webkit.GeolocationPermissions;
 
 import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
@@ -201,7 +200,6 @@ public class WebChromeClientProgressWrapper extends ChromeClientProgress {
     /**
      * Notify the host application that a request for Geolocation permissions,
      * made with a previous call to
-     * {@link #onGeolocationPermissionsShowPrompt(String, GeolocationPermissions.Callback) onGeolocationPermissionsShowPrompt()}
      * has been canceled. Any related UI should therefore be hidden.
      */
     @Override
