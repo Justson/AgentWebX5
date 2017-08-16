@@ -113,7 +113,6 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
             return;
         }
 
-//        Log.i("Info", "length:" + paths.length);
         new CovertFileThread(this.mJsChannelCallback, paths).start();
 
     }
