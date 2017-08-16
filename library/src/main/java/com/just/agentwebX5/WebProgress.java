@@ -56,7 +56,6 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         mPaint.setDither(true);
         mPaint.setStrokeCap(Paint.Cap.SQUARE);
 
-       // context.getResources().getDisplayMetrics().
         screenWidth = context.getResources().getDisplayMetrics().widthPixels;
 
     }
@@ -94,7 +93,6 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
     @Override
     protected void onDraw(Canvas canvas) {
 
-     /*   Log.i("Info", "re:" + (currentProgress / 100 * Float.valueOf(this.getWidth())) + "  width:" + this.getWidth() + "  height:" + this.getHeight() + "  left:" + getLeft() + "  right:" + getRight() + "  b:" + this.getBottom() + " top:" + this.getTop());*/
 
     }
 
