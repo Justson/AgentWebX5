@@ -25,10 +25,7 @@ public class AgentWebJsInterfaceCompat implements AgentWebCompat ,FileUploadPop<
             @Override
             public void call(String value) {
 
-//                Log.i("Info","call:"+value);
-//                StringBuilder sb=new StringBuilder().append("javascript:uploadFileResult ( \"").append(value).append("\" ) ");
                 if(mAgentWebX5 !=null)
-//                    mAgentWebX5.getJsEntraceAccess().callJs("javascript:uploadFileResult(" + value + ")");
                     mAgentWebX5.getJsEntraceAccess().quickCallJs("uploadFileResult",value);
             }
         });
