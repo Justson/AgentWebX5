@@ -4,43 +4,44 @@ import android.util.Log;
 
 /**
  * Created by cenxiaozhong on 2017/5/28.
- * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public class LogUtils {
 
+    private static final String PREFIX = " agentweb ---> "; //
 
     public static boolean isDebug() {
-        return true;
+        return AgentWebConfig.DEBUG;
     }
 
-    public static void i(String tag,String message){
+    public static void i(String tag, String message) {
 
-        if(isDebug())
-            Log.i(tag,message);
+        if (isDebug())
+            Log.i(PREFIX.concat(tag), message);
     }
 
-    public static void v(String tag,String message){
+    public static void v(String tag, String message) {
 
-        if(isDebug())
-            Log.v(tag,message);
+        if (isDebug())
+            Log.v(PREFIX.concat(tag), message);
 
     }
 
     public static void safeCheckCrash(String tag, String msg, Throwable tr) {
         if (isDebug()) {
-            throw new RuntimeException(tag + " " + msg, tr);
+            throw new RuntimeException(PREFIX.concat(tag) + " " + msg, tr);
         } else {
-            Log.e(tag, msg, tr);
+            Log.e(PREFIX.concat(tag), msg, tr);
         }
     }
 
     public static void e(String tag, String msg, Throwable tr) {
         Log.e(tag, msg, tr);
     }
-    public static void e(String tag,String message){
 
-        if(isDebug())
-            Log.e(tag,message);
+    public static void e(String tag, String message) {
+
+        if (BuildConfig.DEBUG)
+            Log.e(PREFIX.concat(tag), message);
     }
 }
