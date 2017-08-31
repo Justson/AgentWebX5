@@ -29,7 +29,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
     private Fragment mFragment;
     //1表示fragment 0 表示activity
     private int tag = 0;
-    private static final int REQUEST_CODE = 0x254;
+    public static final int REQUEST_CODE = 0x254;
     private boolean isL = false;
 
     private WebChromeClient.FileChooserParams mFileChooserParams;

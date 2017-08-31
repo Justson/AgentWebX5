@@ -21,6 +21,7 @@ import android.support.annotation.ColorInt;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.FileProvider;
+import android.support.v4.os.EnvironmentCompat;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -42,13 +43,16 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.CountDownLatch;
@@ -56,6 +60,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
+
+import static android.content.ContentValues.TAG;
+import static com.just.agentwebX5.AgentWebConfig.AGENTWEB_FILE_PATH;
+import static com.just.agentwebX5.AgentWebConfig.FILE_CACHE_PATH;
 
 /**
  * <b>@项目名：</b> agentweb<br>
@@ -421,6 +429,109 @@ public class AgentWebUtils {
         mHandler.post(runnable);
     }
 
+    static File createImageFile(Context context) {
+        File mFile = null;
+        try {
+
+            String timeStamp =
+                    new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
+            String imageName = String.format("aw_%s.jpg", timeStamp);
+            mFile = createFileByName(context, imageName, true);
+        } catch (Throwable e) {
+
+        }
+        return mFile;
+    }
+    static File createFileByName(Context context, String name, boolean cover) throws IOException {
+
+        String path = getAgentWebFilePath(context);
+        if (TextUtils.isEmpty(path))
+            return null;
+        File mFile = new File(path, name);
+        if (mFile.exists()) {
+            if (cover) {
+                mFile.delete();
+                mFile.createNewFile();
+            }
+        } else {
+            mFile.createNewFile();
+        }
+
+        return mFile;
+    }
+    static String getAgentWebFilePath(Context context) {
+        if (!TextUtils.isEmpty(AGENTWEB_FILE_PATH))
+            return AGENTWEB_FILE_PATH;
+        String dir = getDiskExternalCacheDir(context);
+        File mFile = new File(dir, FILE_CACHE_PATH);
+        try {
+            if (!mFile.exists())
+                mFile.mkdirs();
+        } catch (Throwable throwable) {
+            LogUtils.i(TAG, "create dir exception");
+        }
+        LogUtils.i(TAG, "path:" + mFile.getAbsolutePath() + "  path:" + mFile.getPath());
+        return AGENTWEB_FILE_PATH = mFile.getAbsolutePath();
+
+    }
+
+    static String getDiskExternalCacheDir(Context context) {
+
+        File mFile = context.getExternalCacheDir();
+        if (Environment.MEDIA_MOUNTED.equals(EnvironmentCompat.getStorageState(mFile)))
+            return mFile.getAbsolutePath();
+        return null;
+    }
+
+    static Intent getCommonFileIntentCompat(Context context, File file) {
+        Intent mIntent = new Intent().setAction(Intent.ACTION_VIEW);
+        setIntentDataAndType(context, mIntent, getMIMEType(file), file, false);
+        return mIntent;
+    }
+
+    static Intent getIntentCaptureCompat(Context context, File file) {
+        Intent mIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri mUri = getUriFromFile(context, file);
+        mIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        mIntent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+        return mIntent;
+    }
+
+    static void setIntentDataAndType(Context context,
+                                     Intent intent,
+                                     String type,
+                                     File file,
+                                     boolean writeAble) {
+        if (Build.VERSION.SDK_INT >= 24) {
+            intent.setDataAndType(getUriFromFile(context, file), type);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (writeAble) {
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), type);
+        }
+    }
+
+
+    static Uri getUriFromFile(Context context, File file) {
+        Uri uri = null;
+
+//        LogUtils.i("Info", "::" + context.getApplicationInfo().targetSdkVersion + "   INT:" + Build.VERSION.SDK_INT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = getUriFromFileForN(context, file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
+    }
+
+
+    static Uri getUriFromFileForN(Context context, File file) {
+        Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".AgentWebFileProvider", file);
+//        LogUtils.i(TAG, "getUriFromFileForN:" + (context.getPackageName() + ".AgentWebFileProvider"+"   uri:"+fileUri));
+        return fileUri;
+    }
 
     static class EncodeFileRunnable implements Runnable {
 
