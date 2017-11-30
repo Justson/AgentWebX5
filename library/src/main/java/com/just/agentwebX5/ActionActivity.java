@@ -31,6 +31,7 @@ import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static com.just.agentwebX5.ActionActivity.Action.ACTION_CAMERA;
 import static com.just.agentwebX5.FileUpLoadChooserImpl.REQUEST_CODE;
 
+
 /**
  * <p>
  * Created by cenxiaozhong on 2017.8.19
@@ -67,6 +68,7 @@ public final class ActionActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtils.i(TAG, "onCeate ActionActivity");
         Intent intent = getIntent();
         mAction = intent.getParcelableExtra(KEY_ACTION);
         if (mAction.action == Action.ACTION_PERMISSION) {
@@ -144,8 +146,11 @@ public final class ActionActivity extends Activity {
             return;
         }
 
-        if (mPermissionListener != null)
+        LogUtils.i(TAG, "requestPermissions:" + permissions[0]);
+        if (mPermissionListener != null) {
+
             requestPermissions(permissions, 1);
+        }
     }
 
     private Uri mUri;
@@ -176,7 +181,6 @@ public final class ActionActivity extends Activity {
 
 
     }
-
 
 
     @Override
