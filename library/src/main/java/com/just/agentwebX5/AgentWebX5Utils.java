@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +20,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.FileProvider;
 import android.support.v4.os.EnvironmentCompat;
@@ -50,6 +52,7 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -717,7 +720,7 @@ public class AgentWebX5Utils {
 
     }
 
-    public static String FileParcetoJson(Collection<FileParcel> collection) {
+    public static String convertFileParcelObjectsToJson(Collection<FileParcel> collection) {
 
         if (collection == null || collection.size() == 0)
             return null;
@@ -815,5 +818,22 @@ public class AgentWebX5Utils {
                 e.printStackTrace();
         }
         return "";
+    }
+
+
+
+    static List<String> getDeniedPermissions(Activity activity, String[] permissions) {
+
+        if (permissions == null || permissions.length == 0)
+            return null;
+        List<String> deniedPermissions = new ArrayList<>();
+        for (int i = 0; i < permissions.length; i++) {
+
+            if (ContextCompat.checkSelfPermission(activity, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                deniedPermissions.add(permissions[i]);
+            }
+        }
+        return deniedPermissions;
+
     }
 }
