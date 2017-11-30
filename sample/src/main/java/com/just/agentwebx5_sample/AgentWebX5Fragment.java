@@ -70,6 +70,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
                 .setWebViewClient(mWebViewClient)
                 .setWebChromeClient(mWebChromeClient)
                 .setReceivedTitleCallback(mCallback)
+                .setNotifyIcon(R.mipmap.download)
                 .setSecurityType(AgentWebX5.SecurityType.strict)
                 .addDownLoadResultListener(mDownLoadResultListener)
                 .createAgentWeb()//

@@ -155,13 +155,13 @@ public final class ActionActivity extends Activity {
         try {
             if (mFileDataListener == null)
                 finish();
-            File mFile = AgentWebUtils.createImageFile(this);
+            File mFile = AgentWebX5Utils.createImageFile(this);
             if (mFile == null) {
                 mFileDataListener.onFileDataResult(REQUEST_CODE, Activity.RESULT_CANCELED, null);
                 mFileDataListener = null;
                 finish();
             }
-            Intent intent = AgentWebUtils.getIntentCaptureCompat(this, mFile);
+            Intent intent = AgentWebX5Utils.getIntentCaptureCompat(this, mFile);
             LogUtils.i(TAG, "listener:" + mFileDataListener + "  file:" + mFile.getAbsolutePath());
             // 指定开启系统相机的Action
             mUri = intent.getParcelableExtra(EXTRA_OUTPUT);
