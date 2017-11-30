@@ -108,7 +108,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
     private void convertFileAndCallBack(final Uri[] uris) {
 
         String[] paths = null;
-        if (uris == null || uris.length == 0 || (paths = AgentWebUtils.uriToPath(mActivity, uris)) == null || paths.length == 0) {
+        if (uris == null || uris.length == 0 || (paths = AgentWebX5Utils.uriToPath(mActivity, uris)) == null || paths.length == 0) {
             mJsChannelCallback.call(null);
             return;
         }
@@ -184,8 +184,8 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
 
 
             try {
-                Queue<FileParcel> mQueue = AgentWebUtils.convertFile(paths);
-                String result = AgentWebUtils.FileParcetoJson(mQueue);
+                Queue<FileParcel> mQueue = AgentWebX5Utils.convertFile(paths);
+                String result = AgentWebX5Utils.FileParcetoJson(mQueue);
                 LogUtils.i("Info", "result:" + result);
                 if (mJsChannelCallback != null)
                     mJsChannelCallback.call(result);
