@@ -10,7 +10,7 @@
 
         <provider
             android:name=".AgentWebX5FileProvider"
-            android:authorities="${applicationId}.AgentWebFileProvider"
+            android:authorities="${applicationId}.AgentWebX5FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
