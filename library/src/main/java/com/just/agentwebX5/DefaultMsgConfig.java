@@ -5,48 +5,52 @@ import android.os.Parcelable;
 
 /**
  * Created by cenxiaozhong on 2017/7/7.
- *
- * source CODE  https://github.com/Justson/AgentWebX5
  */
 
 public final class DefaultMsgConfig {
 
 
-    private DownLoadMsgConfig mDownLoadMsgConfig=null;
+    private DownLoadMsgConfig mDownLoadMsgConfig = null;
 
-    DefaultMsgConfig(){
+    private ChromeClientMsgCfg mChromeClientMsgCfg = new ChromeClientMsgCfg();
 
-        mDownLoadMsgConfig= new DownLoadMsgConfig();
+    public ChromeClientMsgCfg getChromeClientMsgCfg() {
+        return mChromeClientMsgCfg;
+    }
+
+    DefaultMsgConfig() {
+
+        mDownLoadMsgConfig = new DownLoadMsgConfig();
     }
 
     public DownLoadMsgConfig getDownLoadMsgConfig() {
         return mDownLoadMsgConfig;
     }
 
-    public static class DownLoadMsgConfig  implements Parcelable {
+    public static class DownLoadMsgConfig implements Parcelable {
 
 
-        private String mTaskHasBeenExist="该任务已经存在 ， 请勿重复点击下载!";
+        private String mTaskHasBeenExist = "该任务已经存在 ， 请勿重复点击下载!";
 
-        private String mTips="提示";
+        private String mTips = "提示";
 
-        private String mHoneycomblow="您正在使用手机流量 ， 继续下载该文件吗?";
+        private String mHoneycomblow = "您正在使用手机流量 ， 继续下载该文件吗?";
 
-        private String mDownLoad="下载";
+        private String mDownLoad = "下载";
 
-        private String mCancel="取消";
+        private String mCancel = "取消";
 
-        private String mDownLoadFail="下载失败 ， 出错了 ！";
+        private String mDownLoadFail = "下载失败!";
 
-        private String mLoading="当前进度:%s";
+        private String mLoading = "当前进度:%s";
 
-        private String mTrickter="您有一条新通知";
+        private String mTrickter = "您有一条新通知";
 
-        private String mFileDownLoad="文件下载";
+        private String mFileDownLoad = "文件下载";
 
-        private String mClickOpen="点击打开";
+        private String mClickOpen = "点击打开";
 
-        private String preLoading="即将开始下载文件";
+        private String preLoading = "即将开始下载文件";
 
         public String getPreLoading() {
             return preLoading;
@@ -56,7 +60,7 @@ public final class DefaultMsgConfig {
             this.preLoading = preLoading;
         }
 
-        DownLoadMsgConfig(){
+        DownLoadMsgConfig() {
 
         }
 
@@ -221,5 +225,57 @@ public final class DefaultMsgConfig {
         }
     }
 
+
+    public static final class ChromeClientMsgCfg {
+
+        private FileUploadMsgConfig mFileUploadMsgConfig = new FileUploadMsgConfig();
+
+        public FileUploadMsgConfig getFileUploadMsgConfig() {
+            return mFileUploadMsgConfig;
+        }
+
+        public static final class FileUploadMsgConfig implements Parcelable {
+
+            private String[] medias = new String[]{"相机", "文件选择器"};
+
+            FileUploadMsgConfig() {
+
+            }
+
+            protected FileUploadMsgConfig(Parcel in) {
+                medias = in.createStringArray();
+            }
+
+            public static final Creator<FileUploadMsgConfig> CREATOR = new Creator<FileUploadMsgConfig>() {
+                @Override
+                public FileUploadMsgConfig createFromParcel(Parcel in) {
+                    return new FileUploadMsgConfig(in);
+                }
+
+                @Override
+                public FileUploadMsgConfig[] newArray(int size) {
+                    return new FileUploadMsgConfig[size];
+                }
+            };
+
+            public void setMedias(String[] medias) {
+                this.medias = medias;
+            }
+
+            public String[] getMedias() {
+                return medias;
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeStringArray(medias);
+            }
+        }
+    }
 
 }

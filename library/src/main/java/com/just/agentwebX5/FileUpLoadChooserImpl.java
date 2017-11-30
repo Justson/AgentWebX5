@@ -12,18 +12,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
+
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import static com.just.agentwebX5.ActionActivity.KEY_ACTION;
-import static com.just.agentwebX5.ActionActivity.KEY_FROM_INTENTION;
-import static com.just.agentwebX5.ActionActivity.KEY_URI;
-import static com.just.agentwebX5.ActionActivity.start;
 
 /**
  * Created by cenxiaozhong on 2017/5/22.
@@ -47,7 +44,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
     private boolean cameraState = false;
     private PermissionInterceptor mPermissionInterceptor;
     private int FROM_INTENTION_CODE = 21;
-    
+
 
     public FileUpLoadChooserImpl(Builder builder) {
 
@@ -88,7 +85,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
             ActionActivity.Action mAction = ActionActivity.Action.createPermissionsAction(AgentWebX5Permissions.STORAGE);
             mAction.setFromIntention(FROM_INTENTION_CODE >> 2);
             ActionActivity.setPermissionListener(mPermissionListener);
-            start(mActivity, mAction);
+            ActionActivity.start(mActivity, mAction);
         }
 
 
@@ -98,7 +95,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
         ActionActivity.Action mAction = new ActionActivity.Action();
         mAction.setAction(ActionActivity.Action.ACTION_FILE);
         ActionActivity.setFileDataListener(getFileDataListener());
-        mActivity.startActivity(new Intent(mActivity, ActionActivity.class).putExtra(KEY_ACTION, mAction));
+        mActivity.startActivity(new Intent(mActivity, ActionActivity.class).putExtra(ActionActivity.KEY_ACTION, mAction));
     }
 
     private ActionActivity.FileDataListener getFileDataListener() {
@@ -161,7 +158,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
             mAction.setPermissions(deniedPermissions.toArray(new String[]{}));
             mAction.setFromIntention(FROM_INTENTION_CODE >> 3);
             ActionActivity.setPermissionListener(this.mPermissionListener);
-            start(mActivity, mAction);
+            ActionActivity.start(mActivity, mAction);
         } else {
             openCameraAction();
         }
@@ -188,7 +185,7 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
         ActionActivity.Action mAction = new ActionActivity.Action();
         mAction.setAction(ActionActivity.Action.ACTION_CAMERA);
         ActionActivity.setFileDataListener(this.getFileDataListener());
-        start(mActivity, mAction);
+        ActionActivity.start(mActivity, mAction);
     }
 
     private ActionActivity.PermissionListener mPermissionListener = new ActionActivity.PermissionListener() {
@@ -204,12 +201,13 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
                     break;
                 }
             }
-            permissionResult(tag, extras.getInt(KEY_FROM_INTENTION));
+            permissionResult(tag, extras.getInt(ActionActivity.KEY_FROM_INTENTION));
 
         }
     };
 
     private void permissionResult(boolean grant, int from_intention) {
+        LogUtils.i(TAG, "from_intention:" + from_intention);
         if (from_intention == FROM_INTENTION_CODE >> 2) {
             if (grant) {
                 touchOffFileChooserAction();
@@ -244,12 +242,12 @@ public class FileUpLoadChooserImpl implements IFileUploadChooser {
         if (resultCode == Activity.RESULT_OK) {
 
             if (isL)
-                handleAboveL(cameraState ? new Uri[]{data.getParcelableExtra(KEY_URI)} : processData(data));
+                handleAboveL(cameraState ? new Uri[]{data.getParcelableExtra(ActionActivity.KEY_URI)} : processData(data));
             else if (jsChannel)
-                convertFileAndCallBack(cameraState ? new Uri[]{data.getParcelableExtra(KEY_URI)} : processData(data));
+                convertFileAndCallBack(cameraState ? new Uri[]{data.getParcelableExtra(ActionActivity.KEY_URI)} : processData(data));
             else {
                 if (cameraState && mUriValueCallback != null)
-                    mUriValueCallback.onReceiveValue((Uri) data.getParcelableExtra(KEY_URI));
+                    mUriValueCallback.onReceiveValue((Uri) data.getParcelableExtra(ActionActivity.KEY_URI));
                 else
                     handleBelowLData(data);
             }

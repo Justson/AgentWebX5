@@ -620,7 +620,12 @@ public class AgentWebX5Utils {
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         } // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(fileUri.getScheme())) {
+        else if (fileUri.getAuthority().equalsIgnoreCase(context.getPackageName() + ".AgentWebX5FileProvider")) {
+
+            String path = fileUri.getPath();
+            int index = path.lastIndexOf("/");
+            return getAgentWebFilePath(context) + File.separator + path.substring(index + 1, path.length());
+        }else if ("content".equalsIgnoreCase(fileUri.getScheme())) {
             // Return the remote address
             if (isGooglePhotosUri(fileUri))
                 return fileUri.getLastPathSegment();

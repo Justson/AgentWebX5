@@ -322,8 +322,9 @@ public class AgentWebX5 {
     private WebChromeClient getChromeClient() {
         IndicatorController mIndicatorController = (this.mIndicatorController == null) ? IndicatorHandler.getInstance().inJectProgressView(mWebCreator.offer()) : this.mIndicatorController;
 
-        return this.mTargetChromeClient = new DefaultChromeClient(this.mActivity, mIndicatorController, mWebChromeClient, this.mChromeClientCallbackManager, this.mIVideo = getIVideo());
+        return this.mTargetChromeClient = new DefaultChromeClient(this.mActivity, this.mIndicatorController = mIndicatorController, mWebChromeClient, this.mChromeClientCallbackManager, this.mIVideo = getIVideo(), mDefaultMsgConfig.getChromeClientMsgCfg(), this.mPermissionInterceptor, mWebCreator.get());
     }
+
 
     private IVideo getIVideo() {
         return mIVideo == null ? new VideoImpl(mActivity, mWebCreator.get()) : mIVideo;
@@ -390,6 +391,10 @@ public class AgentWebX5 {
             mIFileUploadChooser = null;
     }
 
+    public PermissionInterceptor getPermissionInterceptor() {
+        return mPermissionInterceptor;
+    }
+
 
     public static class AgentBuilder {
 
@@ -423,6 +428,7 @@ public class AgentWebX5 {
         public ArrayList<DownLoadResultListener> mDownLoadResultListeners;
         private boolean isParallelDownload = false;
         private int icon = -1;
+        private PermissionInterceptor mPermissionInterceptor;
 
         private void addJavaObject(String key, Object o) {
             if (mJavaObject == null)
@@ -640,6 +646,11 @@ public class AgentWebX5 {
             return this;
         }
 
+        public CommonAgentBuilder setPermissionInterceptor(PermissionInterceptor permissionInterceptor) {
+            this.mAgentBuilder.mPermissionInterceptor = permissionInterceptor;
+            return this;
+        }
+
         public CommonAgentBuilder addDownLoadResultListener(DownLoadResultListener downLoadResultListener) {
 
             if (this.mAgentBuilder.mDownLoadResultListeners == null) {
@@ -717,6 +728,7 @@ public class AgentWebX5 {
         private IWebLayout webLayout;
         private boolean isParallelDownload;
         private int icon = -1;
+        private PermissionInterceptor mPermissionInterceptor;
 
 
         public AgentBuilderFragment(@NonNull Activity activity, @NonNull Fragment fragment) {
@@ -826,6 +838,10 @@ public class AgentWebX5 {
 
         }
 
+        public CommonBuilderForFragment setPermissionInterceptor(PermissionInterceptor permissionInterceptor) {
+            this.mAgentBuilderFragment.mPermissionInterceptor = permissionInterceptor;
+            return this;
+        }
         public CommonBuilderForFragment setWebViewClient(@Nullable WebViewClient webChromeClient) {
             this.mAgentBuilderFragment.mWebViewClient = webChromeClient;
             return this;
