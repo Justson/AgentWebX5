@@ -9,7 +9,7 @@
     >
 
         <provider
-            android:name=".AgentWebFileProvider"
+            android:name=".AgentWebX5FileProvider"
             android:authorities="${applicationId}.AgentWebFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -17,6 +17,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/web_download_paths"/>
         </provider>
+
+
+        <activity
+            android:name=".ActionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/actionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
+
+        </activity>
 
         <receiver android:name=".RealDownLoader$NotificationBroadcastReceiver"></receiver>
     </application>

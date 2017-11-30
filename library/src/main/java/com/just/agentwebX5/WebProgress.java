@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.FrameLayout;
 
 /**
  * <b>@项目名：</b> agentwebX5<br>
@@ -82,7 +81,7 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
             w = getContext().getResources().getDisplayMetrics().widthPixels;
         }
         if (hMode == MeasureSpec.AT_MOST) {
-            h = AgentWebUtils.dp2px(this.getContext(), 2);
+            h = AgentWebX5Utils.dp2px(this.getContext(), 2);
         }
         this.setMeasuredDimension(w, h);
 
@@ -224,6 +223,6 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
 
     @Override
     public LayoutParams offerLayoutParams() {
-        return new LayoutParams(-1,AgentWebUtils.dp2px(getContext(), 2));
+        return new LayoutParams(-1, AgentWebX5Utils.dp2px(getContext(), 2));
     }
 }

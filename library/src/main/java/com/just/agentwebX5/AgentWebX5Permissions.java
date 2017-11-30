@@ -6,7 +6,7 @@ import android.Manifest;
  * Created by cenxiaozhong on 2017/8/18.
  */
 
-public class AgentWebPermissions {
+public class AgentWebX5Permissions {
 
 
     public static final String[] CAMERA;

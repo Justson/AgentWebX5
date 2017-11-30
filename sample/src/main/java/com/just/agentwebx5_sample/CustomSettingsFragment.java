@@ -6,9 +6,9 @@ import android.os.Bundle;
  * Created by cenxiaozhong on 2017/5/26.
  */
 
-public class CustomSettingsFragment extends AgentWebFragment {
+public class CustomSettingsFragment extends AgentWebX5Fragment {
 
-    public static AgentWebFragment getInstance(Bundle bundle) {
+    public static AgentWebX5Fragment getInstance(Bundle bundle) {
 
         CustomSettingsFragment mCustomSettingsFragment = new CustomSettingsFragment();
         if (bundle != null)

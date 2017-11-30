@@ -74,7 +74,7 @@ public class DefaultWebClient extends WrapperWebViewClient {
 
         int tag=-1;
 
-        if (AgentWebUtils.isOverriedMethod(mWebViewClient, "shouldOverrideUrlLoading", WEBVIEWCLIENTPATH + ".shouldOverrideUrlLoading", WebView.class, String.class)&&(((tag=1)>0)&&super.shouldOverrideUrlLoading(view,url))) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebViewClient, "shouldOverrideUrlLoading", WEBVIEWCLIENTPATH + ".shouldOverrideUrlLoading", WebView.class, String.class)&&(((tag=1)>0)&&super.shouldOverrideUrlLoading(view,url))) {
             return true;
         }
 
@@ -120,7 +120,7 @@ public class DefaultWebClient extends WrapperWebViewClient {
                     System.out.println("payTask:::" + ex);
                     final H5PayResultModel result = task.h5Pay(ex, true);
                     if (!TextUtils.isEmpty(result.getReturnUrl())) {
-                        AgentWebUtils.runInUiThread(new Runnable() {
+                        AgentWebX5Utils.runInUiThread(new Runnable() {
 
                             @Override
                             public void run() {
@@ -197,7 +197,7 @@ public class DefaultWebClient extends WrapperWebViewClient {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         LogUtils.i("Info", "onPageStarted");
-        if(AgentWebConfig.WEBVIEW_TYPE==AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE&&mWebViewClientCallbackManager.getPageLifeCycleCallback()!=null){
+        if(AgentWebX5Config.WEBVIEW_TYPE== AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE&&mWebViewClientCallbackManager.getPageLifeCycleCallback()!=null){
             mWebViewClientCallbackManager.getPageLifeCycleCallback().onPageStarted(view,url,favicon);
         }
         super.onPageStarted(view, url, favicon);
@@ -221,7 +221,7 @@ public class DefaultWebClient extends WrapperWebViewClient {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        if(AgentWebConfig.WEBVIEW_TYPE==AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE&&mWebViewClientCallbackManager.getPageLifeCycleCallback()!=null){
+        if(AgentWebX5Config.WEBVIEW_TYPE== AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE&&mWebViewClientCallbackManager.getPageLifeCycleCallback()!=null){
             mWebViewClientCallbackManager.getPageLifeCycleCallback().onPageFinished(view,url);
         }
         super.onPageFinished(view, url);
@@ -264,7 +264,7 @@ public class DefaultWebClient extends WrapperWebViewClient {
     public void onScaleChanged(WebView view, float oldScale, float newScale) {
 
 
-        if (AgentWebUtils.isOverriedMethod(mWebViewClient, "onScaleChanged", WEBVIEWCLIENTPATH + ".onScaleChanged", WebView.class, float.class,float.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebViewClient, "onScaleChanged", WEBVIEWCLIENTPATH + ".onScaleChanged", WebView.class, float.class,float.class)) {
             super.onScaleChanged(view, oldScale, newScale);
             return;
         }

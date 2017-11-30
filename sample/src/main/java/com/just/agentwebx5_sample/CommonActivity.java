@@ -40,7 +40,7 @@ public class CommonActivity extends AppCompatActivity {
     }
 
 
-    private AgentWebFragment mAgentWebFragment;
+    private AgentWebX5Fragment mAgentWebX5Fragment;
 
     private void openFragment(int key) {
 
@@ -52,47 +52,47 @@ public class CommonActivity extends AppCompatActivity {
 
             /*Fragment 使用AgenWebt*/
             case 0:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "http://www.vip.com");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "http://www.vip.com");
                 break;
             case 1:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "https://h5.m.jd.com/active/download/download.html?channel=jd-msy1");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "https://h5.m.jd.com/active/download/download.html?channel=jd-msy1");
                 break;
             case 2:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "file:///android_asset/upload_file/uploadfile.html");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "file:///android_asset/upload_file/uploadfile.html");
                 break;
             case 3:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "file:///android_asset/upload_file/jsuploadfile.html");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "file:///android_asset/upload_file/jsuploadfile.html");
                 break;
             case 4:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = JsAgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "file:///android_asset/js_interaction/hello.html");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = JsAgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "file:///android_asset/js_interaction/hello.html");
                 break;
 
             case 5:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "http://m.youku.com/video/id_XODEzMjU1MTI4.html");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "http://m.youku.com/video/id_XODEzMjU1MTI4.html");
                 break;
             case 6:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = CustomIndicatorFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "http://www.taobao.com");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = CustomIndicatorFragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "http://www.taobao.com");
                 break;
             case 7:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = CustomSettingsFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "http://www.wandoujia.com/apps");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = CustomSettingsFragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "http://www.wandoujia.com/apps");
                 break;
 
             case 8:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "file:///android_asset/sms/sms.html");
+                ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "file:///android_asset/sms/sms.html");
                 break;
             /* 自定义 WebView */
             case 9:
-                /*ft.add(R.id.container_framelayout, mAgentWebFragment = CustomWebViewFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "");*/
+                /*ft.add(R.id.container_framelayout, mAgentWebX5Fragment = CustomWebViewFragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "");*/
                 break;
 
         }
@@ -104,16 +104,16 @@ public class CommonActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mAgentWebFragment.onActivityResult(requestCode, resultCode, data);
+        mAgentWebX5Fragment.onActivityResult(requestCode, resultCode, data);
         Log.i("Info", "activity result");
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        AgentWebFragment mAgentWebFragment = this.mAgentWebFragment;
-        if (mAgentWebFragment != null) {
-            FragmentKeyDown mFragmentKeyDown = (FragmentKeyDown) mAgentWebFragment;
+        AgentWebX5Fragment mAgentWebX5Fragment = this.mAgentWebX5Fragment;
+        if (mAgentWebX5Fragment != null) {
+            FragmentKeyDown mFragmentKeyDown = (FragmentKeyDown) mAgentWebX5Fragment;
             if (mFragmentKeyDown.onFragmentKeyDown(keyCode, event))
                 return true;
             else

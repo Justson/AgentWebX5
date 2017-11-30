@@ -144,7 +144,7 @@ public class DefaultWebCreator implements WebCreator {
             FrameLayout.LayoutParams lp = null;
             WebProgress mWebProgress = new WebProgress(mActivity);
             if (height_dp > 0)
-                lp = new FrameLayout.LayoutParams(-2, AgentWebUtils.dp2px(mActivity, height_dp));
+                lp = new FrameLayout.LayoutParams(-2, AgentWebX5Utils.dp2px(mActivity, height_dp));
             else
                 lp = mWebProgress.offerLayoutParams();
             if (color != -1)
@@ -163,10 +163,10 @@ public class DefaultWebCreator implements WebCreator {
         WebView mWebView = null;
         if (this.mWebView != null) {
             mWebView = this.mWebView;
-            AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
+            AgentWebX5Config.WEBVIEW_TYPE = AgentWebX5Config.WEBVIEW_CUSTOM_TYPE;
         } else {
             mWebView = new WebView(mActivity);
-            AgentWebConfig.WEBVIEW_TYPE = AgentWebConfig.WEBVIEW_DEFAULT_TYPE;
+            AgentWebX5Config.WEBVIEW_TYPE = AgentWebX5Config.WEBVIEW_DEFAULT_TYPE;
         }
 
         return mWebView;
@@ -180,7 +180,7 @@ public class DefaultWebCreator implements WebCreator {
             LogUtils.i("Info","add webview");
 
         }else{
-            AgentWebConfig.WEBVIEW_TYPE=AgentWebConfig.WEBVIEW_CUSTOM_TYPE;
+            AgentWebX5Config.WEBVIEW_TYPE= AgentWebX5Config.WEBVIEW_CUSTOM_TYPE;
         }
         this.mWebView=mWebView;
         return mIWebLayout.getLayout();

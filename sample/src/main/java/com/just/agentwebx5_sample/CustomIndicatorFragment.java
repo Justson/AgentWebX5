@@ -18,7 +18,7 @@ import com.just.agentwebX5.WebDefaultSettingsManager;
  * Created by cenxiaozhong on 2017/5/26.
  */
 
-public class CustomIndicatorFragment extends AgentWebFragment {
+public class CustomIndicatorFragment extends AgentWebX5Fragment {
     public static CustomIndicatorFragment getInstance(Bundle bundle){
         CustomIndicatorFragment mCustomIndicatorFragment=new CustomIndicatorFragment();
         if(bundle!=null)

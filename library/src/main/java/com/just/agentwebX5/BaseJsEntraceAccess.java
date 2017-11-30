@@ -77,7 +77,7 @@ public abstract class BaseJsEntraceAccess implements JsEntraceAccess {
 
         for(int i=0;i<params.length;i++){
             String param=params[i];
-            if(!AgentWebUtils.isJson(param)){
+            if(!AgentWebX5Utils.isJson(param)){
 
                 mStringBuilder.append("\"").append(param).append("\"");
             }else{

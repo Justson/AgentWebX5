@@ -17,7 +17,7 @@ import org.json.JSONObject;
  * Created by cenxiaozhong on 2017/5/26.
  */
 
-public class JsAgentWebFragment extends AgentWebFragment {
+public class JsAgentWebFragment extends AgentWebX5Fragment {
 
     public static final JsAgentWebFragment getInstance(Bundle bundle) {
 

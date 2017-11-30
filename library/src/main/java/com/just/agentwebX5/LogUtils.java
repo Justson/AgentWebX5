@@ -11,7 +11,7 @@ public class LogUtils {
     private static final String PREFIX = " agentwebX5 ---> "; //
 
     public static boolean isDebug() {
-        return AgentWebConfig.DEBUG;
+        return AgentWebX5Config.DEBUG;
     }
 
     public static void i(String tag, String message) {

@@ -64,8 +64,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static android.content.ContentValues.TAG;
-import static com.just.agentwebX5.AgentWebConfig.AGENTWEB_FILE_PATH;
-import static com.just.agentwebX5.AgentWebConfig.FILE_CACHE_PATH;
+import static com.just.agentwebX5.AgentWebX5Config.AGENTWEB_FILE_PATH;
+import static com.just.agentwebX5.AgentWebX5Config.FILE_CACHE_PATH;
 
 /**
  * <b>@项目名：</b> agentweb<br>
@@ -78,7 +78,7 @@ import static com.just.agentwebX5.AgentWebConfig.FILE_CACHE_PATH;
  * source CODE  https://github.com/Justson/AgentWebX5
  */
 
-public class AgentWebUtils {
+public class AgentWebX5Utils {
 
     public static int px2dp(Context context, float pxValue) {
 
@@ -301,7 +301,7 @@ public class AgentWebUtils {
             webView.clearCache(true);
             webView.clearHistory();
             webView.clearFormData();
-            AgentWebConfig.removeAllCookies(null);
+            AgentWebX5Config.removeAllCookies(null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -530,8 +530,8 @@ public class AgentWebUtils {
 
 
     static Uri getUriFromFileForN(Context context, File file) {
-        Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".AgentWebFileProvider", file);
-//        LogUtils.i(TAG, "getUriFromFileForN:" + (context.getPackageName() + ".AgentWebFileProvider"+"   uri:"+fileUri));
+        Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".AgentWebX5FileProvider", file);
+//        LogUtils.i(TAG, "getUriFromFileForN:" + (context.getPackageName() + ".AgentWebX5FileProvider"+"   uri:"+fileUri));
         return fileUri;
     }
 
@@ -685,11 +685,11 @@ public class AgentWebUtils {
         if (context.getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.N) {
 
             mIntent = new Intent(Intent.ACTION_VIEW);
-            mIntent.setDataAndType(FileProvider.getUriForFile(context, context.getPackageName() + ".AgentWebFileProvider", file), "application/vnd.android.package-archive");
+            mIntent.setDataAndType(FileProvider.getUriForFile(context, context.getPackageName() + ".AgentWebX5FileProvider", file), "application/vnd.android.package-archive");
             mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
 
-            mIntent = AgentWebUtils.getFileIntent(file);
+            mIntent = AgentWebX5Utils.getFileIntent(file);
         }
 
         return mIntent;

@@ -34,7 +34,7 @@ import static com.just.agentwebx5_sample.R.id.iv_back;
  * Created by cenxiaozhong on 2017/5/15.
  */
 
-public class AgentWebFragment extends Fragment implements FragmentKeyDown {
+public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
 
 
     private ImageView mBackImageView;
@@ -44,13 +44,13 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
     protected AgentWebX5 mAgentWebX5;
     public static final String URL_KEY = "url_key";
 
-    public static AgentWebFragment getInstance(Bundle bundle) {
+    public static AgentWebX5Fragment getInstance(Bundle bundle) {
 
-        AgentWebFragment mAgentWebFragment = new AgentWebFragment();
+        AgentWebX5Fragment mAgentWebX5Fragment = new AgentWebX5Fragment();
         if (bundle != null)
-            mAgentWebFragment.setArguments(bundle);
+            mAgentWebX5Fragment.setArguments(bundle);
 
-        return mAgentWebFragment;
+        return mAgentWebX5Fragment;
 
     }
 
@@ -70,7 +70,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
                 .setWebViewClient(mWebViewClient)
                 .setWebChromeClient(mWebChromeClient)
                 .setReceivedTitleCallback(mCallback)
-                .setNotifyIcon(R.mipmap.download)
+//                .setNotifyIcon(R.mipmap.download)
                 .setSecurityType(AgentWebX5.SecurityType.strict)
                 .addDownLoadResultListener(mDownLoadResultListener)
                 .createAgentWeb()//
@@ -222,11 +222,11 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown {
                 case iv_back:
 
                     if (!mAgentWebX5.back())
-                        AgentWebFragment.this.getActivity().finish();
+                        AgentWebX5Fragment.this.getActivity().finish();
 
                     break;
                 case R.id.iv_finish:
-                    AgentWebFragment.this.getActivity().finish();
+                    AgentWebX5Fragment.this.getActivity().finish();
                     break;
             }
         }

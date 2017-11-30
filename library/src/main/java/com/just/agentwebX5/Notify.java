@@ -1,4 +1,4 @@
-package com.just.library;
+package com.just.agentwebX5;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -136,10 +136,16 @@ public class Notify {
      void sent() {
 
 
-        notification = cBuilder.build();
-         //LogUtils.i("Info","send:"+NOTIFICATION_ID+"  nocation:"+notification+"  ");
-        // 发送该通知
-        nm.notify(NOTIFICATION_ID, notification);
+         try {
+             notification = cBuilder.build();
+             //LogUtils.i("Info","send:"+NOTIFICATION_ID+"  nocation:"+notification+"  ");
+             // 发送该通知
+             nm.notify(NOTIFICATION_ID, notification);
+         }catch (Throwable throwable){
+             throwable.printStackTrace();
+         }
+
+
     }
 
 

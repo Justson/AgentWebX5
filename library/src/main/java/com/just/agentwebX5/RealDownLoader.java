@@ -1,5 +1,6 @@
 package com.just.agentwebX5;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by cenxiaozhong on 2017/5/13.
- * source CODE  https://github.com/Justson/AgentWebX5
+ * source CODE  https://github.com/Justson/AgentWeb
  */
 
 public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements Observer {
@@ -38,11 +38,13 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     private long used = 1;
     private long mTimeLast = 0;
     private long mSpeed = 0;
-
+    private Exception e;
     private static final int TIME_OUT = 30000000;
-    private Notity mNotity;
+    private Notify mNotify;
 
     private static final int ERROR_LOAD = 406;
+    
+    private static final String TAG=RealDownLoader.class.getSimpleName();
 
 
     private AtomicBoolean atomic = new AtomicBoolean(false);
@@ -56,50 +58,46 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
     RealDownLoader(DownLoadTask downLoadTask) {
-
-
         this.mDownLoadTask = downLoadTask;
         this.totals = mDownLoadTask.getLength();
         checkNullTask(downLoadTask);
-
-
     }
 
     private void checkNullTask(DownLoadTask downLoadTask) {
 
+        LogUtils.i("Notify","TAG:"+downLoadTask.getDrawableRes());
+        if(downLoadTask.getDrawableRes()==-1){
+            downLoadTask.setDrawableRes(R.mipmap.download);
+        }
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
         mObservable.addObserver(this);
         buildNotify(new Intent(), mDownLoadTask.getId(), mDownLoadTask.getDownLoadMsgConfig().getPreLoading());
     }
 
     private boolean checkDownLoaderCondition() {
 
-
-        if (mDownLoadTask.getLength() - mDownLoadTask.getFile().length() > AgentWebUtils.getAvailableStorage()) {
-            LogUtils.i("Info", " 空间不足");
+        if (mDownLoadTask.getLength() - mDownLoadTask.getFile().length() > AgentWebX5Utils.getAvailableStorage()) {
+            LogUtils.i(TAG, " 空间不足");
             return false;
         }
-
         return true;
     }
 
     private boolean checknet() {
         if (!mDownLoadTask.isForce()) {
-
-            return AgentWebUtils.checkWifi(mDownLoadTask.getContext());
+            return AgentWebX5Utils.checkWifi(mDownLoadTask.getContext());
         } else {
-            return AgentWebUtils.checkNetwork(mDownLoadTask.getContext());
+            return AgentWebX5Utils.checkNetwork(mDownLoadTask.getContext());
         }
 
 
     }
 
-    private Exception e;
+
 
     @Override
     protected Integer doInBackground(Void... params) {
@@ -114,8 +112,8 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
         } catch (Exception e) {
 
-            this.e = e;//逃逸
-            LogUtils.i("Info", "doInBackground   Exception:" + e.getMessage());
+            this.e = e;//发布
+            LogUtils.i(TAG, "doInBackground   Exception:" + e.getMessage());
             // e.printStackTrace();
 
         }
@@ -132,20 +130,16 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
             mHttpURLConnection.addRequestProperty("Range", "bytes=" + (tmp = mDownLoadTask.getFile().length()) + "-");
         }
-
         try {
             mHttpURLConnection.connect();
             if (mHttpURLConnection.getResponseCode() != 200 && mHttpURLConnection.getResponseCode() != 206) {
-
                 return DownLoadMsg.NETWORK_ERROR_STATUS_CODE.CODE;
             }
-
             return doDownLoad(mHttpURLConnection.getInputStream(), new LoadingRandomAccessFile(mDownLoadTask.getFile()));
         } finally {
             if (mHttpURLConnection != null)
                 mHttpURLConnection.disconnect();
         }
-
 
     }
 
@@ -163,19 +157,17 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     @Override
     protected void onProgressUpdate(Integer... values) {
 
-
         try {
-
-            //LogUtils.i("Info", "progress:" + ((tmp + loaded) / Float.valueOf(totals) * 100) + "tmp:" + tmp + "  load=:" + loaded + "  total:" + totals);
+            //LogUtils.i(TAG, "progress:" + ((tmp + loaded) / Float.valueOf(totals) * 100) + "tmp:" + tmp + "  load=:" + loaded + "  total:" + totals);
             long c = System.currentTimeMillis();
-            if (mNotity != null && c - time > 800) {
+            if (mNotify != null && c - time > 800) {
                 time = c;
-                if (!mNotity.hasDeleteContent())
-                    mNotity.setDelecte(buildCancelContent(mDownLoadTask.getContext().getApplicationContext(), mDownLoadTask.getId()));
+                if (!mNotify.hasDeleteContent())
+                    mNotify.setDelecte(buildCancelContent(mDownLoadTask.getContext().getApplicationContext(), mDownLoadTask.getId()));
 
                 int mProgress = (int) ((tmp + loaded) / Float.valueOf(totals) * 100);
-                mNotity.setContentText(String.format(mDownLoadTask.getDownLoadMsgConfig().getLoading(), mProgress + "%"));
-                mNotity.setProgress(100, mProgress, false);
+                mNotify.setContentText(String.format(mDownLoadTask.getDownLoadMsgConfig().getLoading(), mProgress + "%"));
+                mNotify.setProgress(100, mProgress, false);
             }
 
         } catch (UnknownFormatConversionException e) {
@@ -191,33 +183,36 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     protected void onPostExecute(Integer integer) {
 
         try {
-
-            LogUtils.i("Info", "onPostExecute:" + integer);
+            LogUtils.i(TAG, "onPostExecute:" + integer);
             mObservable.deleteObserver(this);
             doCallback(integer);
             if (integer > 200) {
 
-                if (mNotity != null)
-                    mNotity.cancel(mDownLoadTask.getId());
+                if (mNotify != null)
+                    mNotify.cancel(mDownLoadTask.getId());
                 return;
             }
-
             if (mDownLoadTask.isEnableIndicator()) {
-
-                if (mNotity != null)
-                    mNotity.cancel(mDownLoadTask.getId());
-
-                Intent intent = AgentWebUtils.getIntentCompat(mDownLoadTask.getContext(), mDownLoadTask.getFile());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent rightPendIntent = PendingIntent.getActivity(mDownLoadTask.getContext(),
-                        mDownLoadTask.getId() << 4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                mNotity.setProgressFinish(mDownLoadTask.getDownLoadMsgConfig().getClickOpen(), rightPendIntent);
-
+                if (mNotify != null)
+                    mNotify.cancel(mDownLoadTask.getId());
+                Intent mIntent = AgentWebX5Utils.getCommonFileIntentCompat(mDownLoadTask.getContext(), mDownLoadTask.getFile());
+                try {
+                    if (mIntent != null) {
+                        if (!(mDownLoadTask.getContext() instanceof Activity))
+                            mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        PendingIntent rightPendIntent = PendingIntent.getActivity(mDownLoadTask.getContext(),
+                                mDownLoadTask.getId() << 4, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        mNotify.setProgressFinish(mDownLoadTask.getDownLoadMsgConfig().getClickOpen(), rightPendIntent);
+                    }
+                    return;
+                } catch (Throwable throwable) {
+                    if (LogUtils.isDebug())
+                        throwable.printStackTrace();
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtils.i("Info", "e:" + e.getMessage());
+            LogUtils.i(TAG, "e:" + e.getMessage());
         }
 
 
@@ -225,8 +220,9 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
     private void doCallback(Integer code) {
         DownLoadResultListener mDownLoadResultListener = null;
-        LogUtils.i("Info", " doCallback  mDownLoadTask.getDownLoadResultListeners():" + mDownLoadTask.getDownLoadResultListener());
         if ((mDownLoadResultListener = mDownLoadTask.getDownLoadResultListener()) == null) {
+            LogUtils.e(TAG,"DownLoadResultListener has been death");
+            DefaultDownLoaderImpl.ExecuteTasksMap.getInstance().removeTask(mDownLoadTask.getFile().getPath());
             return;
         }
         if (code > 200) {
@@ -248,10 +244,10 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
                     0x33 * id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             int smallIcon = mDownLoadTask.getDrawableRes();
             String ticker = mDownLoadTask.getDownLoadMsgConfig().getTrickter();
-            mNotity = new Notity(mContext, id);
+            mNotify = new Notify(mContext, id);
 
-            mNotity.notify_progress(rightPendIntent, smallIcon, ticker, mDownLoadTask.getDownLoadMsgConfig().getFileDownLoad(), progressHint, false, false, false, buildCancelContent(mContext, id));
-            mNotity.sent();
+            mNotify.notify_progress(rightPendIntent, smallIcon, ticker, mDownLoadTask.getDownLoadMsgConfig().getFileDownLoad(), progressHint, false, false, false, buildCancelContent(mContext, id));
+            mNotify.sent();
         }
     }
 
@@ -263,14 +259,14 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
         intentCancel.putExtra("type", "type");
         intentCancel.putExtra("TAG", mDownLoadTask.getUrl());
         PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(context, id << 3, intentCancel, PendingIntent.FLAG_UPDATE_CURRENT);
-        LogUtils.i("Info", "id<<3:" + (id << 3));
+        LogUtils.i(TAG, "id<<3:" + (id << 3));
         return pendingIntentCancel;
     }
 
 
     private int doDownLoad(InputStream in, RandomAccessFile out) throws IOException {
 
-        byte[] buffer = new byte[102400];
+        byte[] buffer = new byte[10240];
         BufferedInputStream bis = new BufferedInputStream(in, 1024 * 10);
         try {
 
@@ -289,7 +285,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
                 bytes += n;
 
                 if (!checknet()) {
-                    LogUtils.i("Info", "network");
+                    LogUtils.i(TAG, "network");
                     return DownLoadMsg.NETWORK_ERROR_CONNECTION.CODE;
                 }
 
@@ -298,12 +294,11 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
                 } else if (previousBlockTime == -1) {
                     previousBlockTime = System.currentTimeMillis();
                 } else if ((System.currentTimeMillis() - previousBlockTime) > TIME_OUT) {
-                    LogUtils.i("Info", "timeout");
+                    LogUtils.i(TAG, "timeout");
                     return DownLoadMsg.TIME_OUT.CODE;
                 }
             }
-
-            LogUtils.i("Info", "atomic:" + atomic.get());
+            LogUtils.i(TAG, "atomic:" + atomic.get());
             if (atomic.get()) {
                 return DownLoadMsg.USER_CANCEL.CODE;
             }
@@ -322,8 +317,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
     @Override
     public void update(Observable o, Object arg) {
-
-        //LogUtils.i("Info", "update Object    ... ");
+        //LogUtils.i(TAG, "update Object    ... ");
         String url = "";
         if (arg instanceof String && !TextUtils.isEmpty(url = (String) arg) && url.equals(mDownLoadTask.getUrl())) {
             toCancel();
@@ -350,9 +344,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
     enum DownLoadMsg {
-
         NETWORK_ERROR_CONNECTION(400), NETWORK_ERROR_STATUS_CODE(401), STORAGE_ERROR(402), TIME_OUT(403), USER_CANCEL(404), SUCCESSFULL(200);
-
         int CODE;
 
         DownLoadMsg(int e) {
@@ -361,7 +353,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
         public static String getMsgByCode(int code) {
-            LogUtils.i("Info", "  CODE:" + code);
+            LogUtils.i(TAG, "  CODE:" + code);
             switch (code) {
 
 
@@ -383,7 +375,6 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
             }
         }
 
-        ;
 
 
     }
@@ -393,33 +384,23 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
         public NotificationBroadcastReceiver() {
-
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-
             String action = intent.getAction();
-
             if (action.equals("com.agentweb.cancelled")) {
 
-
                 try {
-
                     String url = intent.getStringExtra("TAG");
                     Class<?> mClazz = mObservable.getClass();
                     Method mMethod = mClazz.getMethod("setChanged", (Class<?>[]) null);
                     mMethod.setAccessible(true);
                     mMethod.invoke(mObservable, (Object[]) null);
                     mObservable.notifyObservers(url);
-                    LogUtils.i("Info", "size:" + mObservable.countObservers());
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
+                    LogUtils.i(TAG, "size:" + mObservable.countObservers());
+                } catch (Throwable ignore) {
+//                    ignore.printStackTrace();
                 }
 
             }

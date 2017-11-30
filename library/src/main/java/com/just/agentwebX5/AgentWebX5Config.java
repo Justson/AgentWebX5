@@ -15,7 +15,7 @@ import com.tencent.smtt.sdk.ValueCallback;
  * https://github.com/Justson/AgentWebX5
  */
 
-public class AgentWebConfig {
+public class AgentWebX5Config {
 
 
     static final String AGENTWEB_CACHE_PATCH = "/agentweb_cache";
@@ -25,7 +25,7 @@ public class AgentWebConfig {
     static String AGENTWEB_FILE_PATH;
     static final String FILE_CACHE_PATH = "agentweb-cache";
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     static final boolean isKikatOrBelowKikat = Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT;
 //    static final boolean isKikatOrBelowKikat= true;
 

@@ -53,7 +53,7 @@ public class LoaderImpl implements ILoader {
     public void loadUrl(String url) {
 
 
-        if (!AgentWebUtils.isUIThread()) {
+        if (!AgentWebX5Utils.isUIThread()) {
             safeLoadUrl(url);
             return;
         }
@@ -61,7 +61,7 @@ public class LoaderImpl implements ILoader {
         /*if (TextUtils.isEmpty(url))
             throw new UrlCommonException("url is null or '' or not startsWith http ,javascript , file , please check url format");*/
 
-        if (!AgentWebUtils.isEmptyMap(this.headers))
+        if (!AgentWebX5Utils.isEmptyMap(this.headers))
             this.mWebView.loadUrl(url, headers);
         else
             this.mWebView.loadUrl(url);
@@ -69,7 +69,7 @@ public class LoaderImpl implements ILoader {
 
     @Override
     public void reload() {
-        if (!AgentWebUtils.isUIThread()) {
+        if (!AgentWebX5Utils.isUIThread()) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -86,7 +86,7 @@ public class LoaderImpl implements ILoader {
     @Override
     public void loadData(final String data, final String mimeType, final String encoding) {
 
-        if (!AgentWebUtils.isUIThread()) {
+        if (!AgentWebX5Utils.isUIThread()) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -102,7 +102,7 @@ public class LoaderImpl implements ILoader {
     @Override
     public void stopLoading() {
 
-        if (!AgentWebUtils.isUIThread()) {
+        if (!AgentWebX5Utils.isUIThread()) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -118,7 +118,7 @@ public class LoaderImpl implements ILoader {
     @Override
     public void loadDataWithBaseURL(final String baseUrl, final String data, final String mimeType, final String encoding, final String historyUrl) {
 
-        if (!AgentWebUtils.isUIThread()) {
+        if (!AgentWebX5Utils.isUIThread()) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {

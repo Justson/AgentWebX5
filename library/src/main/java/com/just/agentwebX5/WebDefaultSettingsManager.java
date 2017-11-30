@@ -49,7 +49,7 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
         mWebSettings.setSupportZoom(true);
         mWebSettings.setBuiltInZoomControls(false);
         mWebSettings.setSavePassword(false);
-        if (AgentWebUtils.checkNetwork(webView.getContext())) {
+        if (AgentWebX5Utils.checkNetwork(webView.getContext())) {
             //根据cache-control获取数据。
             mWebSettings.setCacheMode(com.tencent.smtt.sdk.WebSettings.LOAD_DEFAULT);
         } else {
@@ -90,9 +90,9 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
         mWebSettings.setGeolocationEnabled(true);
 
         //
-        String dir =AgentWebConfig.getCachePath(webView.getContext());
+        String dir = AgentWebX5Config.getCachePath(webView.getContext());
 
-        Log.i("Info","dir:"+dir+"   appcache:"+AgentWebConfig.getCachePath(webView.getContext()));
+        Log.i("Info","dir:"+dir+"   appcache:"+ AgentWebX5Config.getCachePath(webView.getContext()));
         //设置数据库路径  api19 已经废弃,这里只针对 webkit 起作用
         mWebSettings.setGeolocationDatabasePath(dir);
         mWebSettings.setDatabasePath(dir);
@@ -123,7 +123,6 @@ public class WebDefaultSettingsManager implements WebSettings ,WebListenerManage
     @Override
     public WebListenerManager setWebViewClient(WebView webView, WebViewClient webViewClient) {
         webView.setWebViewClient(webViewClient);
-
         return this;
     }
 
