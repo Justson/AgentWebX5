@@ -76,7 +76,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
         super.onProgressChanged(view, newProgress);
 
         ChromeClientCallbackManager.AgentWebCompatInterface mAgentWebCompatInterface = null;
-        if (AgentWebConfig.WEBVIEW_TYPE == AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && (mAgentWebCompatInterface = mChromeClientCallbackManager.getAgentWebCompatInterface()) != null) {
+        if (AgentWebX5Config.WEBVIEW_TYPE == AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && (mAgentWebCompatInterface = mChromeClientCallbackManager.getAgentWebCompatInterface()) != null) {
             mAgentWebCompatInterface.onProgressChanged(view, newProgress);
         }
 
@@ -88,7 +88,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
         if (mChromeClientCallbackManager != null && (mCallback = mChromeClientCallbackManager.getReceivedTitleCallback()) != null)
             mCallback.onReceivedTitle(view, title);
 
-        if (AgentWebConfig.WEBVIEW_TYPE == AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && (mChromeClientCallbackManager.getAgentWebCompatInterface()) != null)
+        if (AgentWebX5Config.WEBVIEW_TYPE == AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && (mChromeClientCallbackManager.getAgentWebCompatInterface()) != null)
             mChromeClientCallbackManager.getAgentWebCompatInterface().onReceivedTitle(view, title);
         if (isWrapper)
             super.onReceivedTitle(view, title);
@@ -98,7 +98,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
 
 
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onJsAlert", "public boolean " + ChromePath + ".onJsAlert", WebView.class, String.class, String.class, JsResult.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onJsAlert", "public boolean " + ChromePath + ".onJsAlert", WebView.class, String.class, String.class, JsResult.class)) {
 
             return super.onJsAlert(view, url, message, result);
         }
@@ -107,7 +107,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
         if (mActivity == null)
             return true;
         //
-        AgentWebUtils.show(view,
+        AgentWebX5Utils.show(view,
                 message,
                 Snackbar.LENGTH_SHORT,
                 Color.WHITE,
@@ -135,7 +135,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     @Override
     public void onGeolocationPermissionsShowPrompt(String origin,GeolocationPermissionsCallback callback) {
 
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onGeolocationPermissionsShowPrompt", "public void " + ChromePath + ".onGeolocationPermissionsShowPrompt", String.class, GeolocationPermissions.Callback.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onGeolocationPermissionsShowPrompt", "public void " + ChromePath + ".onGeolocationPermissionsShowPrompt", String.class, GeolocationPermissions.Callback.class)) {
             super.onGeolocationPermissionsShowPrompt(origin, callback);
             return;
         }
@@ -147,11 +147,11 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
 
 
         try {
-            if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onJsPrompt", "public boolean " + ChromePath + ".onJsPrompt", WebView.class, String.class, String.class, String.class, JsPromptResult.class)) {
+            if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onJsPrompt", "public boolean " + ChromePath + ".onJsPrompt", WebView.class, String.class, String.class, String.class, JsPromptResult.class)) {
 
                 return super.onJsPrompt(view, url, message, defaultValue, result);
             }
-            if (AgentWebConfig.WEBVIEW_TYPE == AgentWebConfig.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && mChromeClientCallbackManager.getAgentWebCompatInterface() != null) {
+            if (AgentWebX5Config.WEBVIEW_TYPE == AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && mChromeClientCallbackManager.getAgentWebCompatInterface() != null) {
 
                 LogUtils.i("Info", "mChromeClientCallbackManager.getAgentWebCompatInterface():" + mChromeClientCallbackManager.getAgentWebCompatInterface());
                 if (mChromeClientCallbackManager.getAgentWebCompatInterface().onJsPrompt(view, url, message, defaultValue, result))
@@ -167,7 +167,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
 
     @Override
     public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onJsConfirm", "public boolean " + ChromePath + ".onJsConfirm", WebView.class, String.class, String.class, JsResult.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onJsConfirm", "public boolean " + ChromePath + ".onJsConfirm", WebView.class, String.class, String.class, JsResult.class)) {
 
             return super.onJsConfirm(view, url, message, result);
         }
@@ -258,7 +258,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     public void onExceededDatabaseQuota(String url, String databaseIdentifier, long quota, long estimatedDatabaseSize, long totalQuota, WebStorage.QuotaUpdater quotaUpdater) {
 
 
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onExceededDatabaseQuota", ChromePath + ".onExceededDatabaseQuota", String.class, String.class, long.class, long.class, long.class, WebStorage.QuotaUpdater.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onExceededDatabaseQuota", ChromePath + ".onExceededDatabaseQuota", String.class, String.class, long.class, long.class, long.class, WebStorage.QuotaUpdater.class)) {
 
             super.onExceededDatabaseQuota(url, databaseIdentifier, quota, estimatedDatabaseSize, totalQuota, quotaUpdater);
             return;
@@ -270,7 +270,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     public void onReachedMaxAppCacheSize(long requiredStorage, long quota, WebStorage.QuotaUpdater quotaUpdater) {
 
 
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onReachedMaxAppCacheSize", ChromePath + ".onReachedMaxAppCacheSize", long.class, long.class, WebStorage.QuotaUpdater.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onReachedMaxAppCacheSize", ChromePath + ".onReachedMaxAppCacheSize", long.class, long.class, WebStorage.QuotaUpdater.class)) {
 
             super.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater);
             return;
@@ -283,7 +283,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     @Override
     public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
         LogUtils.i("Info", "openFileChooser>=5.0");
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onShowFileChooser", ChromePath + ".onShowFileChooser", WebView.class, ValueCallback.class, FileChooserParams.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onShowFileChooser", ChromePath + ".onShowFileChooser", WebView.class, ValueCallback.class, FileChooserParams.class)) {
 
             return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
         }
@@ -308,7 +308,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture) {
         /*believe me , i never want to do this */
         LogUtils.i("Info", "openFileChooser>=4.1");
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "openFileChooser", ChromePath + ".openFileChooser", ValueCallback.class, String.class, String.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "openFileChooser", ChromePath + ".openFileChooser", ValueCallback.class, String.class, String.class)) {
             super.openFileChooser(uploadFile, acceptType, capture);
             return;
         }
@@ -317,7 +317,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
 
     //  Android < 3.0
     public void openFileChooser(ValueCallback<Uri> valueCallback) {
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "openFileChooser", ChromePath + ".openFileChooser", ValueCallback.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "openFileChooser", ChromePath + ".openFileChooser", ValueCallback.class)) {
             super.openFileChooser(valueCallback);
             return;
         }
@@ -329,7 +329,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     public void openFileChooser(ValueCallback valueCallback, String acceptType) {
         Log.i("Info", "openFileChooser>3.0");
 
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "openFileChooser", ChromePath + ".openFileChooser", ValueCallback.class, String.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "openFileChooser", ChromePath + ".openFileChooser", ValueCallback.class, String.class)) {
             super.openFileChooser(valueCallback, acceptType);
             return;
         }
@@ -367,7 +367,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     @Override
     public void onShowCustomView(View view, IX5WebChromeClient.CustomViewCallback callback) {
         Log.i("Info", "view:" + view + "   callback:" + callback);
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onShowCustomView", ChromePath + ".onShowCustomView", View.class, IX5WebChromeClient.CustomViewCallback.class)) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onShowCustomView", ChromePath + ".onShowCustomView", View.class, IX5WebChromeClient.CustomViewCallback.class)) {
             super.onShowCustomView(view, callback);
             return;
         }
@@ -381,7 +381,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
 
     @Override
     public void onHideCustomView() {
-        if (AgentWebUtils.isOverriedMethod(mWebChromeClient, "onHideCustomView", ChromePath + ".onHideCustomView")) {
+        if (AgentWebX5Utils.isOverriedMethod(mWebChromeClient, "onHideCustomView", ChromePath + ".onHideCustomView")) {
             LogUtils.i("Info","onHide:"+true);
             super.onHideCustomView();
             return;
