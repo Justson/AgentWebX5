@@ -43,8 +43,8 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     private Notify mNotify;
 
     private static final int ERROR_LOAD = 406;
-    
-    private static final String TAG=RealDownLoader.class.getSimpleName();
+
+    private static final String TAG = RealDownLoader.class.getSimpleName();
 
 
     private AtomicBoolean atomic = new AtomicBoolean(false);
@@ -65,8 +65,8 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
     private void checkNullTask(DownLoadTask downLoadTask) {
 
-        LogUtils.i("Notify","TAG:"+downLoadTask.getDrawableRes());
-        if(downLoadTask.getDrawableRes()==-1){
+        LogUtils.i("Notify", "TAG:" + downLoadTask.getDrawableRes());
+        if (downLoadTask.getDrawableRes() == -1 || downLoadTask.getDrawableRes() == 0) {
             downLoadTask.setDrawableRes(R.mipmap.download);
         }
     }
@@ -96,7 +96,6 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
 
     }
-
 
 
     @Override
@@ -221,7 +220,7 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
     private void doCallback(Integer code) {
         DownLoadResultListener mDownLoadResultListener = null;
         if ((mDownLoadResultListener = mDownLoadTask.getDownLoadResultListener()) == null) {
-            LogUtils.e(TAG,"DownLoadResultListener has been death");
+            LogUtils.e(TAG, "DownLoadResultListener has been death");
             DefaultDownLoaderImpl.ExecuteTasksMap.getInstance().removeTask(mDownLoadTask.getFile().getPath());
             return;
         }
@@ -374,7 +373,6 @@ public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements
 
             }
         }
-
 
 
     }
