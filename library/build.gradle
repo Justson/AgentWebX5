@@ -48,4 +48,5 @@ publish {
     version = '1.0.0'
     description = 'very easy to build you web page'
     website = "https://github.com/Justson/AgentWebX5"
+
 }

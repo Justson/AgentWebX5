@@ -8,7 +8,7 @@ import com.tencent.smtt.sdk.WebView;
 /**
  * Created by cenxiaozhong on 2017/6/3.
  *
- * source CODE  https://github.com/Justson/AgentWebX5
+ * source code  https://github.com/Justson/AgentWebX5
  */
 
 public class DefaultWebLifeCycleImpl implements WebLifeCycle {
