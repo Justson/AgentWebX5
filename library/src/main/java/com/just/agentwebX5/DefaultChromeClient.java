@@ -43,7 +43,7 @@ import static com.just.agentwebX5.ActionActivity.KEY_FROM_INTENTION;
  * source code  https://github.com/Justson/AgentWeb
  */
 
-public class DefaultChromeClient extends WebChromeClientProgressWrapper implements FileUploadPop<IFileUploadChooser> {
+public class DefaultChromeClient extends MiddleWareWebChromeBase implements FileUploadPop<IFileUploadChooser> {
 
 
     private WeakReference<Activity> mActivityWeakReference = null;
@@ -65,6 +65,7 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     private GeolocationPermissionsCallback mCallback = null;
     public static final int FROM_CODE_INTENTION = 0x18;
     public static final int FROM_CODE_INTENTION_LOCATION = FROM_CODE_INTENTION << 2;
+    private IndicatorController mIndicatorController;
 
     DefaultChromeClient(Activity activity,
                         IndicatorController indicatorController,
@@ -72,7 +73,8 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
                         ChromeClientCallbackManager chromeClientCallbackManager,
                         @Nullable IVideo iVideo,
                         DefaultMsgConfig.ChromeClientMsgCfg chromeClientMsgCfg, PermissionInterceptor permissionInterceptor, WebView webView) {
-        super(indicatorController, chromeClient);
+        super( chromeClient);
+        this.mIndicatorController=indicatorController;
         isWrapper = chromeClient != null ? true : false;
         this.mWebChromeClient = chromeClient;
         mActivityWeakReference = new WeakReference<Activity>(activity);
@@ -84,10 +86,16 @@ public class DefaultChromeClient extends WebChromeClientProgressWrapper implemen
     }
 
 
+
+
+
     @Override
     public void onProgressChanged(WebView view, int newProgress) {
         super.onProgressChanged(view, newProgress);
 
+        if(this.mIndicatorController!=null){
+            this.mIndicatorController.progress(view,newProgress);
+        }
         ChromeClientCallbackManager.AgentWebCompatInterface mAgentWebCompatInterface = null;
         if (AgentWebX5Config.WEBVIEW_TYPE == AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE && mChromeClientCallbackManager != null && (mAgentWebCompatInterface = mChromeClientCallbackManager.getAgentWebCompatInterface()) != null) {
             mAgentWebCompatInterface.onProgressChanged(view, newProgress);

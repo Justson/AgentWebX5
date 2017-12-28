@@ -18,8 +18,11 @@ import android.widget.TextView;
 
 import com.just.agentwebX5.AgentWebX5;
 import com.just.agentwebX5.ChromeClientCallbackManager;
+import com.just.agentwebX5.DefaultWebClient;
 import com.just.agentwebX5.DownLoadResultListener;
 import com.just.agentwebX5.LogUtils;
+import com.just.agentwebX5.MiddleWareWebChromeBase;
+import com.just.agentwebX5.MiddleWareWebClientBase;
 import com.just.agentwebX5.PermissionInterceptor;
 import com.just.agentwebX5.WebDefaultSettingsManager;
 import com.just.agentwebX5.WebSettings;
@@ -45,6 +48,8 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
     protected AgentWebX5 mAgentWebX5;
     public static final String URL_KEY = "url_key";
     public static final String TAG = AgentWebX5Fragment.class.getSimpleName();
+    private MiddleWareWebChromeBase mMiddleWareWebChrome;
+    private MiddleWareWebClientBase mMiddleWareWebClient;
 
 
     public static AgentWebX5Fragment getInstance(Bundle bundle) {
@@ -75,13 +80,16 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
                 .setReceivedTitleCallback(mCallback)
                 .setPermissionInterceptor(mPermissionInterceptor)
 //                .setNotifyIcon(R.mipmap.download)
+                .useMiddleWareWebChrome(getMiddleWareWebChrome())
+                .useMiddleWareWebClient(getMiddleWareWebClient())
+                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
+                .interceptUnkownScheme()
                 .openParallelDownload()
                 .setSecurityType(AgentWebX5.SecurityType.strict)
                 .addDownLoadResultListener(mDownLoadResultListener)
                 .createAgentWeb()//
                 .ready()//
                 .go(getUrl());
-
 
 
         initView(view);
@@ -92,8 +100,6 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
 //
 //        mLinearLayout.addView(mX5WebView,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 //        mX5WebView.loadUrl(getUrl());
-
-
 
 
     }
@@ -271,5 +277,13 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
         mAgentWebX5.getWebLifeCycle().onDestroy();
         super.onDestroyView();
         //  mAgentWebX5.destroy();
+    }
+
+    public MiddleWareWebChromeBase getMiddleWareWebChrome() {
+        return mMiddleWareWebChrome;
+    }
+
+    public MiddleWareWebClientBase getMiddleWareWebClient() {
+        return mMiddleWareWebClient;
     }
 }

@@ -65,12 +65,22 @@ public final class ActionActivity extends Activity {
         mPermissionListener = permissionListener;
     }
 
+    private void cancelAction() {
+        mFileDataListener = null;
+        mPermissionListener = null;
+        mRationaleListener = null;
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtils.i(TAG, "onCeate ActionActivity");
         Intent intent = getIntent();
         mAction = intent.getParcelableExtra(KEY_ACTION);
+        if(mAction==null){
+            cancelAction();
+            finish();
+            return;
+        }
         if (mAction.action == Action.ACTION_PERMISSION) {
             permission(mAction);
         } else if (mAction.action == ACTION_CAMERA) {
@@ -123,6 +133,7 @@ public final class ActionActivity extends Activity {
             finish();
         }
     }
+
 
     private void permission(Action action) {
         String[] permissions = action.permissions;

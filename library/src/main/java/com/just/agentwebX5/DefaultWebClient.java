@@ -21,6 +21,8 @@ import com.tencent.smtt.sdk.WebViewClient;
 
 import java.lang.ref.WeakReference;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * <b>@项目名：</b> agentweb<br>
  * <b>@包名：</b><br>
@@ -43,6 +45,11 @@ public class DefaultWebClient extends WrapperWebViewClient {
     public static final String INTENT_SCHEME="intent://";
     public static final String WEBCHAT_PAY_SCHEME="weixin://wap/pay?";
 
+    public static final int DERECT_OPEN_OTHER_APP = 1001;
+    public static final int ASK_USER_OPEN_OTHER_APP = DERECT_OPEN_OTHER_APP >> 2;
+    public static final int DISALLOW_OPEN_OTHER_APP = DERECT_OPEN_OTHER_APP >> 4;
+    private boolean isInterceptUnkownScheme = true;
+
     private static final boolean hasAlipayLib;
     static {
         boolean tag=true;
@@ -62,6 +69,28 @@ public class DefaultWebClient extends WrapperWebViewClient {
         mWeakReference=new WeakReference<Activity>(activity);
         this.mWebViewClientCallbackManager=manager;
         this.webClientHelper=webClientHelper;
+    }
+
+    public int schemeHandleType = ASK_USER_OPEN_OTHER_APP;
+    private DefaultMsgConfig.WebViewClientMsgCfg mMsgCfg = null;
+    private WebView mWebView;
+
+    DefaultWebClient(Builder builder) {
+        super(builder.client);
+        this.mWebView = builder.webView;
+        this.mWebViewClient = builder.client;
+        mWeakReference = new WeakReference<Activity>(builder.activity);
+        this.mWebViewClientCallbackManager = builder.manager;
+        this.webClientHelper = builder.webClientHelper;
+        isInterceptUnkownScheme = builder.isInterceptUnkownScheme;
+
+        LogUtils.i(TAG, "schemeHandleType:" + schemeHandleType);
+        if (builder.schemeHandleType <= 0) {
+            schemeHandleType = ASK_USER_OPEN_OTHER_APP;
+        } else {
+            schemeHandleType = builder.schemeHandleType;
+        }
+        this.mMsgCfg = builder.mCfg;
     }
 
 
@@ -275,4 +304,92 @@ public class DefaultWebClient extends WrapperWebViewClient {
         }
 
     }
+
+    public static Builder createBuilder() {
+        return new Builder();
+    }
+
+    public static enum OpenOtherPageWays {
+        DERECT(DefaultWebClient.DERECT_OPEN_OTHER_APP), ASK(DefaultWebClient.ASK_USER_OPEN_OTHER_APP), DISALLOW(DefaultWebClient.DISALLOW_OPEN_OTHER_APP);
+        int code;
+
+        OpenOtherPageWays(int code) {
+            this.code = code;
+        }
+    }
+
+
+
+
+
+
+
+
+
+    public static class Builder {
+
+        private Activity activity;
+        private WebViewClient client;
+        private WebViewClientCallbackManager manager;
+        private boolean webClientHelper;
+        private PermissionInterceptor permissionInterceptor;
+        private WebView webView;
+        private boolean isInterceptUnkownScheme;
+        private int schemeHandleType;
+        private DefaultMsgConfig.WebViewClientMsgCfg mCfg;
+
+        public Builder setCfg(DefaultMsgConfig.WebViewClientMsgCfg cfg) {
+            mCfg = cfg;
+            return this;
+        }
+
+        public Builder setActivity(Activity activity) {
+            this.activity = activity;
+            return this;
+        }
+
+        public Builder setClient(WebViewClient client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder setManager(WebViewClientCallbackManager manager) {
+            this.manager = manager;
+            return this;
+        }
+
+        public Builder setWebClientHelper(boolean webClientHelper) {
+            this.webClientHelper = webClientHelper;
+            return this;
+        }
+
+        public Builder setPermissionInterceptor(PermissionInterceptor permissionInterceptor) {
+            this.permissionInterceptor = permissionInterceptor;
+            return this;
+        }
+
+        public Builder setWebView(WebView webView) {
+            this.webView = webView;
+            return this;
+        }
+
+        public Builder setInterceptUnkownScheme(boolean interceptUnkownScheme) {
+            this.isInterceptUnkownScheme = interceptUnkownScheme;
+            return this;
+        }
+
+        public Builder setSchemeHandleType(int schemeHandleType) {
+            this.schemeHandleType = schemeHandleType;
+            return this;
+        }
+
+        public DefaultWebClient build() {
+            return new DefaultWebClient(this);
+        }
+    }
+
+
+
+
+
 }

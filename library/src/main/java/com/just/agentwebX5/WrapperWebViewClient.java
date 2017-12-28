@@ -28,6 +28,9 @@ public class WrapperWebViewClient extends WebViewClient {
         this.mWebViewClient=client;
     }
 
+    void setWebViewClient(WebViewClient webViewClient){
+        this.mWebViewClient=webViewClient;
+    }
     @Override
     @Deprecated
     public boolean shouldOverrideUrlLoading(WebView view, String url) {

@@ -30,18 +30,18 @@ import java.lang.reflect.Method;
  * <b>@描述:source CODE  https://github.com/Justson/AgentWebX5</b><br>
  */
 
-public class WebChromeClientProgressWrapper extends ChromeClientProgress {
+public class WebChromeClientWrapper extends WebChromeClient {
     protected WebChromeClient mRealWebChromeClient;
 
-    public WebChromeClientProgressWrapper(IndicatorController indicatorController, WebChromeClient realWebChromeClient) {
-        this(indicatorController);
+    public WebChromeClientWrapper(WebChromeClient realWebChromeClient) {
         this.mRealWebChromeClient = realWebChromeClient;
     }
 
-    public WebChromeClientProgressWrapper(IndicatorController indicatorController) {
-        super(indicatorController);
 
+    void setWebChromeClient(WebChromeClient webChromeClient){
+        this.mRealWebChromeClient=webChromeClient;
     }
+
 
     @Override
     public void onProgressChanged(WebView view, int newProgress) {

@@ -72,6 +72,11 @@ public class AgentWebX5 {
     private DefaultMsgConfig mDefaultMsgConfig;
     private PermissionInterceptor mPermissionInterceptor;
 
+    private boolean isInterceptUnkownScheme = false;
+    private int openOtherAppWays = -1;
+    private MiddleWareWebClientBase mMiddleWrareWebClientBaseHeader;
+    private MiddleWareWebChromeBase mMiddleWareWebChromeBaseHeader;
+
 
     private AgentWebX5(AgentBuilder agentBuilder) {
         this.mActivity = agentBuilder.mActivity;
@@ -123,6 +128,14 @@ public class AgentWebX5 {
         this.mWebLifeCycle = new DefaultWebLifeCycleImpl(mWebCreator.get());
         mWebSecurityController = new WebSecurityControllerImpl(mWebCreator.get(), this.mAgentWebX5.mJavaObjects, this.mSecurityType);
         this.webClientHelper = agentBuilderFragment.webClientHelper;
+
+
+        this.isInterceptUnkownScheme = agentBuilderFragment.isInterceptUnkownScheme;
+        if (agentBuilderFragment.openOtherPage != null) {
+            this.openOtherAppWays = agentBuilderFragment.openOtherPage.code;
+        }
+        this.mMiddleWrareWebClientBaseHeader = agentBuilderFragment.header;
+        this.mMiddleWareWebChromeBaseHeader = agentBuilderFragment.mChromeMiddleWareHeader;
 
         init();
         setDownloadListener(agentBuilderFragment.mDownLoadResultListeners, agentBuilderFragment.isParallelDownload, agentBuilderFragment.icon);
@@ -322,7 +335,25 @@ public class AgentWebX5 {
     private WebChromeClient getChromeClient() {
         IndicatorController mIndicatorController = (this.mIndicatorController == null) ? IndicatorHandler.getInstance().inJectProgressView(mWebCreator.offer()) : this.mIndicatorController;
 
-        return this.mTargetChromeClient = new DefaultChromeClient(this.mActivity, this.mIndicatorController = mIndicatorController, mWebChromeClient, this.mChromeClientCallbackManager, this.mIVideo = getIVideo(), mDefaultMsgConfig.getChromeClientMsgCfg(), this.mPermissionInterceptor, mWebCreator.get());
+        DefaultChromeClient mDefaultChromeClient =
+                new DefaultChromeClient(this.mActivity, this.mIndicatorController = mIndicatorController, this.mWebChromeClient, this.mChromeClientCallbackManager, this.mIVideo = getIVideo(), mDefaultMsgConfig.getChromeClientMsgCfg(), this.mPermissionInterceptor, mWebCreator.get());
+
+        LogUtils.i(TAG, "WebChromeClient:" + this.mWebChromeClient);
+        MiddleWareWebChromeBase header = this.mMiddleWareWebChromeBaseHeader;
+        if (header != null) {
+            MiddleWareWebChromeBase tail = header;
+            int count = 1;
+            MiddleWareWebChromeBase tmp = header;
+            while (tmp.next() != null) {
+                tail = tmp = tmp.next();
+                count++;
+            }
+            LogUtils.i(TAG, "MiddleWareWebClientBase middleware count:" + count);
+            tail.setWebChromeClient(mDefaultChromeClient);
+            return this.mTargetChromeClient = header;
+        } else {
+            return this.mTargetChromeClient = mDefaultChromeClient;
+        }
     }
 
 
@@ -336,10 +367,34 @@ public class AgentWebX5 {
     }
 
     private WebViewClient getClient() {
-        if (!webClientHelper && AgentWebX5Config.WEBVIEW_TYPE != AgentWebX5Config.WEBVIEW_AGENTWEB_SAFE_TYPE && mWebViewClient != null) {
-            return mWebViewClient;
+
+        LogUtils.i(TAG, "getWebViewClient:" + this.mMiddleWrareWebClientBaseHeader);
+        DefaultWebClient mDefaultWebClient = DefaultWebClient
+                .createBuilder()
+                .setActivity(this.mActivity)
+                .setClient(this.mWebViewClient)
+                .setManager(this.mWebViewClientCallbackManager)
+                .setWebClientHelper(this.webClientHelper)
+                .setPermissionInterceptor(this.mPermissionInterceptor)
+                .setWebView(this.mWebCreator.get())
+                .setInterceptUnkownScheme(this.isInterceptUnkownScheme)
+                .setSchemeHandleType(this.openOtherAppWays)
+                .setCfg(this.mDefaultMsgConfig.getWebViewClientMsgCfg())
+                .build();
+        MiddleWareWebClientBase header = this.mMiddleWrareWebClientBaseHeader;
+        if (header != null) {
+            MiddleWareWebClientBase tail = header;
+            int count = 1;
+            MiddleWareWebClientBase tmp = header;
+            while (tmp.next() != null) {
+                tail = tmp = tmp.next();
+                count++;
+            }
+            LogUtils.i(TAG, "MiddleWareWebClientBase middleware count:" + count);
+            tail.setWebViewClient(mDefaultWebClient);
+            return header;
         } else {
-            return new DefaultWebClient(mActivity, this.mWebViewClient, this.mWebViewClientCallbackManager, webClientHelper);
+            return mDefaultWebClient;
         }
 
     }
@@ -729,6 +784,12 @@ public class AgentWebX5 {
         private boolean isParallelDownload;
         private int icon = -1;
         private PermissionInterceptor mPermissionInterceptor;
+        private MiddleWareWebClientBase tail;
+        private MiddleWareWebClientBase header;
+        private MiddleWareWebChromeBase mChromeMiddleWareTail;
+        private MiddleWareWebChromeBase mChromeMiddleWareHeader;
+        private DefaultWebClient.OpenOtherPageWays openOtherPage;
+        private boolean isInterceptUnkownScheme;
 
 
         public AgentBuilderFragment(@NonNull Activity activity, @NonNull Fragment fragment) {
@@ -846,6 +907,41 @@ public class AgentWebX5 {
             this.mAgentBuilderFragment.mWebViewClient = webChromeClient;
             return this;
         }
+
+        public CommonBuilderForFragment useMiddleWareWebClient(@NonNull MiddleWareWebClientBase middleWrareWebClientBase) {
+            if (middleWrareWebClientBase == null) {
+                return this;
+            }
+            if (this.mAgentBuilderFragment.header == null) {
+                this.mAgentBuilderFragment.header = this.mAgentBuilderFragment.tail = middleWrareWebClientBase;
+            } else {
+                this.mAgentBuilderFragment.tail.enq(middleWrareWebClientBase);
+                this.mAgentBuilderFragment.tail = middleWrareWebClientBase;
+            }
+            return this;
+        }
+
+        public CommonBuilderForFragment setOpenOtherPageWays(@Nullable DefaultWebClient.OpenOtherPageWays openOtherPageWays) {
+            this.mAgentBuilderFragment.openOtherPage = openOtherPageWays;
+            return this;
+        }
+        public CommonBuilderForFragment interceptUnkownScheme() {
+            this.mAgentBuilderFragment.isInterceptUnkownScheme = true;
+            return this;
+        }
+        public CommonBuilderForFragment useMiddleWareWebChrome(@NonNull MiddleWareWebChromeBase middleWareWebChromeBase) {
+            if (middleWareWebChromeBase == null) {
+                return this;
+            }
+            if (this.mAgentBuilderFragment.mChromeMiddleWareHeader == null) {
+                this.mAgentBuilderFragment.mChromeMiddleWareHeader = this.mAgentBuilderFragment.mChromeMiddleWareTail = middleWareWebChromeBase;
+            } else {
+                this.mAgentBuilderFragment.mChromeMiddleWareTail.enq(middleWareWebChromeBase);
+                this.mAgentBuilderFragment.mChromeMiddleWareTail = middleWareWebChromeBase;
+            }
+            return this;
+        }
+
 
         public CommonBuilderForFragment setWebSettings(@Nullable WebSettings webSettings) {
             this.mAgentBuilderFragment.mWebSettings = webSettings;
