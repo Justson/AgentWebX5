@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +29,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by cenxiaozhong on 2017/5/13.
@@ -163,7 +166,6 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
 
             Intent mIntent = AgentWebX5Utils.getCommonFileIntentCompat(mContext, mFile);
             try {
-//                mContext.getPackageManager().resolveActivity(mIntent)
                 if (mIntent != null) {
                     if (!(mContext instanceof Activity))
                         mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -246,46 +248,41 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
     }
 
 
+
     private File getFile(String contentDisposition, String url) {
 
         try {
-            String filename = "";
-            if (!TextUtils.isEmpty(contentDisposition) && contentDisposition.contains("filename") && !contentDisposition.endsWith("filename")) {
 
-                int position = contentDisposition.indexOf("filename");
-                filename = contentDisposition.substring(position);
-                if (filename.contains("=")) {
-                    filename = filename.replace("filename=", "");
-                } else {
-                    filename = filename.replace("filename", "");
-                }
+            String fileName = getFileName(contentDisposition);
+            if (TextUtils.isEmpty(fileName) && !TextUtils.isEmpty(url)) {
+                Uri mUri = Uri.parse(url);
+                fileName = mUri.getPath().substring(mUri.getPath().lastIndexOf('/') + 1);
             }
-            if (TextUtils.isEmpty(filename) && !TextUtils.isEmpty(url) && !url.endsWith("/")) {
-
-                int p = url.lastIndexOf("/");
-                if (p != -1)
-                    filename = url.substring(p + 1);
-                if (filename.contains("?")) {
-                    int index = filename.indexOf("?");
-                    filename = filename.substring(0, index);
-
-                }
+            if (!TextUtils.isEmpty(fileName)&&fileName.length() > 64) {
+                fileName = fileName.substring(fileName.length() - 64, fileName.length());
             }
-
-            if (TextUtils.isEmpty(filename)) {
-                filename = AgentWebX5Utils.md5(url);
+            if (TextUtils.isEmpty(fileName)) {
+                fileName = AgentWebX5Utils.md5(url);
             }
-            LogUtils.i(TAG, "name:" + filename);
-            if (filename.length() > 64) {
-                filename = filename.substring(filename.length() - 64, filename.length());
-            }
-            LogUtils.i(TAG, "filename:" + filename);
-            return AgentWebX5Utils.createFileByName(mContext, filename, false);
-        } catch (Exception e) {
-            e.printStackTrace();
+            return AgentWebX5Utils.createFileByName(mContext, fileName, false);
+        } catch (Throwable e) {
+            if (LogUtils.isDebug())
+                e.printStackTrace();
         }
 
         return null;
+    }
+
+    private String getFileName(String contentDisposition) {
+        if (TextUtils.isEmpty(contentDisposition)) {
+            return "";
+        }
+        Matcher m = Pattern.compile(".*filename=(.*)").matcher(contentDisposition.toLowerCase());
+        if (m.find()) {
+            return m.group(1);
+        } else {
+            return "";
+        }
     }
 
     @Override
