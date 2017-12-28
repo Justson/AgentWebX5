@@ -79,7 +79,7 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
                 .setWebChromeClient(mWebChromeClient)
                 .setReceivedTitleCallback(mCallback)
                 .setPermissionInterceptor(mPermissionInterceptor)
-//                .setNotifyIcon(R.mipmap.download)
+                .setNotifyIcon(R.mipmap.download)
                 .useMiddleWareWebChrome(getMiddleWareWebChrome())
                 .useMiddleWareWebClient(getMiddleWareWebClient())
                 .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)

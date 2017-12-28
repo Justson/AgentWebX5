@@ -2,14 +2,15 @@ package com.just.agentwebX5;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -73,13 +74,6 @@ public class DefaultWebClient extends WrapperWebViewClient {
         LogUtils.i("Info","static  hasAlipayLib:"+hasAlipayLib);
     }
 
-    DefaultWebClient(@NonNull Activity activity, WebViewClient client, WebViewClientCallbackManager manager,boolean webClientHelper) {
-        super(client);
-        this.mWebViewClient=client;
-        mWeakReference=new WeakReference<Activity>(activity);
-        this.mWebViewClientCallbackManager=manager;
-        this.webClientHelper=webClientHelper;
-    }
 
     public int schemeHandleType = ASK_USER_OPEN_OTHER_APP;
     private DefaultMsgConfig.WebViewClientMsgCfg mMsgCfg = null;
@@ -185,7 +179,7 @@ public class DefaultWebClient extends WrapperWebViewClient {
                 if (mWeakReference.get() != null) {
                     askOpenOtherAppDialog = new AlertDialog
                             .Builder(mWeakReference.get())//
-                            .setMessage(mMsgCfg.getLeaveApp())//
+                            .setMessage(String.format(mMsgCfg.getLeaveApp(), getApplicationName(mWebView.getContext())))//
                             .setTitle(mMsgCfg.getTitle())
                             .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                 @Override
@@ -211,6 +205,19 @@ public class DefaultWebClient extends WrapperWebViewClient {
             default://默认不打开
                 return false;
         }
+    }
+    private String getApplicationName(Context context) {
+        PackageManager packageManager = null;
+        ApplicationInfo applicationInfo = null;
+        try {
+            packageManager = context.getApplicationContext().getPackageManager();
+            applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            applicationInfo = null;
+        }
+        String applicationName =
+                (String) packageManager.getApplicationLabel(applicationInfo);
+        return applicationName;
     }
 
     private boolean openOtherPage(String intentUrl) {
