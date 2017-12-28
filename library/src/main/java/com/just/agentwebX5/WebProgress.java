@@ -3,7 +3,6 @@ package com.just.agentwebX5;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 
 /**
  * <b>@项目名：</b> agentwebX5<br>
@@ -28,16 +28,14 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
     private int mColor;
     private Paint mPaint;
     private ValueAnimator mValueAnimator;
+    private int targetWidth = 0;
 
     public WebProgress(Context context) {
         this(context, null);
     }
-
     public WebProgress(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
-    private int screenWidth = 0;
 
     public WebProgress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -56,7 +54,9 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         mPaint.setDither(true);
         mPaint.setStrokeCap(Paint.Cap.SQUARE);
 
-        screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        targetWidth = context.getResources().getDisplayMetrics().widthPixels;
+
+
 
     }
 
@@ -79,7 +79,7 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         int h = MeasureSpec.getSize(heightMeasureSpec);
 
         if (wMode == MeasureSpec.AT_MOST) {
-            w = getContext().getResources().getDisplayMetrics().widthPixels;
+            w = w <= getContext().getResources().getDisplayMetrics().widthPixels ? w : getContext().getResources().getDisplayMetrics().widthPixels;
         }
         if (hMode == MeasureSpec.AT_MOST) {
             h = AgentWebX5Utils.dp2px(this.getContext(), 2);
@@ -93,19 +93,16 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
     @Override
     protected void onDraw(Canvas canvas) {
 
-
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-//        super.dispatchDraw(canvas);
         canvas.drawRect(0, 0, currentProgress / 100 * Float.valueOf(this.getWidth()), this.getHeight(), mPaint);
     }
 
-    @SuppressLint("WrongConstant")
     public void show() {
 
-        LogUtils.i("WebProgress", "show  -- >:" + getVisibility());
+        LogUtils.i("WebProgress","WebProgress show");
         if (getVisibility() == View.GONE) {
             this.setVisibility(View.VISIBLE);
             currentProgress = 0f;
@@ -114,10 +111,19 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
 
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        this.targetWidth = getMeasuredWidth();
+        LogUtils.i("WebProgress", "" + targetWidth);
+    }
+
     public void setProgress(float progress) {
         if (getVisibility() == View.GONE) {
             setVisibility(View.VISIBLE);
         }
+        if (progress < 90f)
+            return;
         startAnim(progress, false);
     }
 
@@ -161,25 +167,24 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         if (target == value)
             return;
 
-        if(value<currentProgress)
+        if (value < currentProgress && value != -1)
             return;
 
-        float v = (isAuto) ? 80f : value;
+        float v = (isAuto) ? 90f : value;
 
 
         if (mValueAnimator != null && mValueAnimator.isStarted()) {
             mValueAnimator.cancel();
         }
-//        Log.i("Info", "currentProgress:" + currentProgress + "  value:" + v);
         currentProgress = currentProgress == 0f ? 0.00000001f : currentProgress;
         mValueAnimator = ValueAnimator.ofFloat(currentProgress, v);
         mValueAnimator.setInterpolator(new LinearInterpolator());
 
-        long duration = (long) Math.abs((v / 100f * screenWidth) - (currentProgress / 100f * screenWidth));
+        long duration = (long) Math.abs((v / 100f * targetWidth) - (currentProgress / 100f * targetWidth));
 
 
         /*默认每个像素8毫秒*/
-        mValueAnimator.setDuration(isAuto ? duration * 8 : (long) (duration * weightDuration(v, currentProgress)));
+        mValueAnimator.setDuration(isAuto ? duration * 4 : (long) (duration * weightDuration(v, currentProgress)));
         mValueAnimator.addUpdateListener(mAnimatorUpdateListener);
         mValueAnimator.addListener(mAnimatorListenerAdapter);
         mValueAnimator.start();
@@ -192,7 +197,6 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             float t = (float) animation.getAnimatedValue();
-//            Log.i("Info", "t:" + t);
             WebProgress.this.currentProgress = t;
             WebProgress.this.invalidate();
 
@@ -217,7 +221,7 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
     @Override
     public void reset() {
         currentProgress = 0;
-        if(mValueAnimator!=null&&mValueAnimator.isStarted())
+        if (mValueAnimator != null && mValueAnimator.isStarted())
             mValueAnimator.cancel();
     }
 
@@ -229,7 +233,7 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
 
 
     @Override
-    public LayoutParams offerLayoutParams() {
-        return new LayoutParams(-1, AgentWebX5Utils.dp2px(getContext(), 2));
+    public FrameLayout.LayoutParams offerLayoutParams() {
+        return new FrameLayout.LayoutParams(-1, AgentWebX5Utils.dp2px(getContext(), 2));
     }
 }

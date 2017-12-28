@@ -72,7 +72,7 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAgentWebX5 = AgentWebX5.with(this)//
-                .setAgentWebParent((ViewGroup) view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//
+                .setAgentWebParent((LinearLayout) view, new LinearLayout.LayoutParams(-1,-1))//
                 .setIndicatorColorWithHeight(-1, 2)//
                 .setWebSettings(getSettings())//
                 .setWebViewClient(mWebViewClient)
