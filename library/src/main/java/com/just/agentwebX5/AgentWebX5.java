@@ -406,10 +406,12 @@ public class AgentWebX5 {
 
 
     private AgentWebX5 go(String url) {
-        this.getLoader().loadUrl(url);
+
         IndicatorController mIndicatorController = null;
-        if (!TextUtils.isEmpty(url) && (mIndicatorController = getIndicatorController()) != null && mIndicatorController.offerIndicator() != null)
+        if (!TextUtils.isEmpty(url) && (mIndicatorController = getIndicatorController()) != null && mIndicatorController.offerIndicator() != null){
             getIndicatorController().offerIndicator().show();
+        }
+        this.getLoader().loadUrl(url);
         return this;
     }
 

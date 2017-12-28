@@ -50,7 +50,6 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'junit:junit:4.12'
     compile project(':library')
-    compile files('libs/alipaySingle-20170510.jar')
     compile project(':twlibrary')
 //    compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
 }

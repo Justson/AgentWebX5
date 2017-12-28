@@ -3,6 +3,7 @@ package com.just.agentwebX5;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -101,10 +102,16 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         canvas.drawRect(0, 0, currentProgress / 100 * Float.valueOf(this.getWidth()), this.getHeight(), mPaint);
     }
 
+    @SuppressLint("WrongConstant")
     public void show() {
-        this.setVisibility(View.VISIBLE);
-        currentProgress=0f;
-        startAnim(-1, true);
+
+        LogUtils.i("WebProgress", "show  -- >:" + getVisibility());
+        if (getVisibility() == View.GONE) {
+            this.setVisibility(View.VISIBLE);
+            currentProgress = 0f;
+            startAnim(-1, true);
+        }
+
     }
 
     public void setProgress(float progress) {

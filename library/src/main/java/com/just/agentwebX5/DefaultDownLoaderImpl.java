@@ -88,7 +88,7 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
     @Override
     public synchronized void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
 
-        LogUtils.i(TAG,"disposition"+contentDisposition);
+        LogUtils.i(TAG, "disposition" + contentDisposition);
         onDownloadStartInternal(url, contentDisposition, mimetype, contentLength);
 
     }
@@ -248,7 +248,6 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
     }
 
 
-
     private File getFile(String contentDisposition, String url) {
 
         try {
@@ -258,7 +257,7 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
                 Uri mUri = Uri.parse(url);
                 fileName = mUri.getPath().substring(mUri.getPath().lastIndexOf('/') + 1);
             }
-            if (!TextUtils.isEmpty(fileName)&&fileName.length() > 64) {
+            if (!TextUtils.isEmpty(fileName) && fileName.length() > 64) {
                 fileName = fileName.substring(fileName.length() - 64, fileName.length());
             }
             if (TextUtils.isEmpty(fileName)) {
@@ -295,7 +294,9 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
             return;
         }
         for (DownLoadResultListener mDownLoadResultListener : mDownLoadResultListeners) {
-            mDownLoadResultListener.success(path);
+            if (mDownLoadResultListener != null) {
+                mDownLoadResultListener.success(path);
+            }
         }
     }
 
@@ -311,6 +312,9 @@ public class DefaultDownLoaderImpl implements DownloadListener, DownLoadResultLi
         }
 
         for (DownLoadResultListener mDownLoadResultListener : mDownLoadResultListeners) {
+            if (mDownLoadResultListener == null) {
+                continue;
+            }
             mDownLoadResultListener.error(path, resUrl, cause, e);
         }
     }

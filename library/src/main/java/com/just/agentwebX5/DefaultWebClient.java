@@ -2,6 +2,7 @@ package com.just.agentwebX5;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -9,9 +10,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
+import com.alipay.sdk.app.H5PayCallback;
 import com.alipay.sdk.app.PayTask;
 import com.alipay.sdk.util.H5PayResultModel;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
@@ -20,6 +23,9 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Constructor;
+import java.net.URISyntaxException;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -49,6 +55,10 @@ public class DefaultWebClient extends WrapperWebViewClient {
     public static final int ASK_USER_OPEN_OTHER_APP = DERECT_OPEN_OTHER_APP >> 2;
     public static final int DISALLOW_OPEN_OTHER_APP = DERECT_OPEN_OTHER_APP >> 4;
     private boolean isInterceptUnkownScheme = true;
+
+    public static final String ALIPAYS_SCHEME = "alipays://";
+    public static final String HTTP_SCHEME = "http://";
+    public static final String HTTPS_SCHEME = "https://";
 
     private static final boolean hasAlipayLib;
     static {
@@ -96,41 +106,200 @@ public class DefaultWebClient extends WrapperWebViewClient {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        LogUtils.i("Info","shouldOverrideUrlLoading --->  url:"+url);
-        if(webClientHelper&&handleNormalLinked(url)){
+        LogUtils.i(TAG, "shouldOverrideUrlLoading --->  url:" + url);
+
+
+        int tag = -1;
+
+        if (AgentWebX5Utils.isOverriedMethod(mWebViewClient, "shouldOverrideUrlLoading", WEBVIEWCLIENTPATH + ".shouldOverrideUrlLoading", WebView.class, String.class) && (((tag = 1) > 0) && super.shouldOverrideUrlLoading(view, url))) {
             return true;
         }
 
-        int tag=-1;
-
-        if (AgentWebX5Utils.isOverriedMethod(mWebViewClient, "shouldOverrideUrlLoading", WEBVIEWCLIENTPATH + ".shouldOverrideUrlLoading", WebView.class, String.class)&&(((tag=1)>0)&&super.shouldOverrideUrlLoading(view,url))) {
-            return true;
+        if (url.startsWith(HTTP_SCHEME) || url.startsWith(HTTPS_SCHEME)) {
+            return (webClientHelper && hasAlipayLib && isAlipay(view, url));
         }
 
-        if(webClientHelper&&url.startsWith(INTENT_SCHEME)){ //拦截
+        if (!webClientHelper) {
+            return false;
+        }
+        if (handleLinked(url)) { //电话 ， 邮箱 ， 短信
+            return true;
+        }
+        if (url.startsWith(INTENT_SCHEME)) { //Intent scheme
             handleIntentUrl(url);
             return true;
         }
 
-        if(webClientHelper&&url.startsWith(WEBCHAT_PAY_SCHEME)){
+        if (url.startsWith(WEBCHAT_PAY_SCHEME)) { //微信支付
             startActivity(url);
             return true;
         }
-
-        LogUtils.i("Info","shouldOverrideUrlLoading --->  url:"+url);
-        if(webClientHelper&&handleNormalLinked(url)){
+        if (url.startsWith(ALIPAYS_SCHEME) && openOtherPage(url)) {//支付宝
             return true;
         }
 
-
-        if(webClientHelper&&hasAlipayLib&&isAlipay(view,url))
+        if (queryActivies(url) > 0 && handleOtherScheme(url)) { //打开Scheme 相对应的页面
+            LogUtils.i(TAG, "intercept OtherAppScheme");
             return true;
+        }
+        if (isInterceptUnkownScheme) { // 手机里面没有页面能匹配到该链接 ， 也就是无法处理的scheme返回True，拦截下来。
+            LogUtils.i(TAG, "intercept InterceptUnkownScheme : " + url);
+            return true;
+        }
 
-        if(tag>0)
+        if (tag > 0)
             return false;
 
 
         return super.shouldOverrideUrlLoading(view, url);
+    }
+
+    private int queryActivies(String url) {
+
+        try {
+            if (mWeakReference.get() == null) {
+                return 0;
+            }
+            Intent intent = new Intent().parseUri(url, Intent.URI_INTENT_SCHEME);
+            PackageManager mPackageManager = mWeakReference.get().getPackageManager();
+            List<ResolveInfo> mResolveInfos = mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            return mResolveInfos == null ? 0 : mResolveInfos.size();
+        } catch (URISyntaxException ignore) {
+            if (LogUtils.isDebug()) {
+                ignore.printStackTrace();
+            }
+            return 0;
+        }
+    }
+
+    private AlertDialog askOpenOtherAppDialog = null;
+
+    private boolean handleOtherScheme(final String url) {
+
+        switch (schemeHandleType) {
+
+            case DERECT_OPEN_OTHER_APP: //直接打开其他App
+                openOtherPage(url);
+                return true;
+            case ASK_USER_OPEN_OTHER_APP:  //咨询用户是否打开其他App
+                if (mWeakReference.get() != null) {
+                    askOpenOtherAppDialog = new AlertDialog
+                            .Builder(mWeakReference.get())//
+                            .setMessage(mMsgCfg.getLeaveApp())//
+                            .setTitle(mMsgCfg.getTitle())
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if(dialog!=null){
+                                        dialog.dismiss();
+                                    }
+                                }
+                            })//
+                            .setPositiveButton(mMsgCfg.getConfirm(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if(dialog!=null){
+                                        dialog.dismiss();
+                                    }
+                                    openOtherPage(url);
+                                }
+                            })
+                            .create();
+                }
+                askOpenOtherAppDialog.show();
+                return true;
+            default://默认不打开
+                return false;
+        }
+    }
+
+    private boolean openOtherPage(String intentUrl) {
+        try {
+            Intent intent;
+            Activity mActivity = null;
+            if ((mActivity = mWeakReference.get()) == null)
+                return true;
+            PackageManager packageManager = mActivity.getPackageManager();
+            intent = new Intent().parseUri(intentUrl, Intent.URI_INTENT_SCHEME);
+            ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            LogUtils.i(TAG, "resolveInfo:" + info + "   package:" + intent.getPackage());
+            if (info != null) {  //跳到该应用
+                mActivity.startActivity(intent);
+                return true;
+            }
+        } catch (Throwable ignore) {
+            if (LogUtils.isDebug()) {
+                ignore.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
+    private Object mPayTask; //alipay
+    private boolean isAlipay(final android.webkit.WebView view, String url) {
+
+        try {
+
+            Activity mActivity = null;
+            if ((mActivity = mWeakReference.get()) == null)
+                return false;
+            /**
+             * 推荐采用的新的二合一接口(payInterceptorWithUrl),只需调用一次
+             */
+            if (mPayTask == null) {
+                Class clazz = Class.forName("com.alipay.sdk.app.PayTask");
+                Constructor<?> mConstructor = clazz.getConstructor(Activity.class);
+                mPayTask = mConstructor.newInstance(mActivity);
+            }
+            final PayTask task = (PayTask) mPayTask;
+            boolean isIntercepted = task.payInterceptorWithUrl(url, true, new H5PayCallback() {
+                @Override
+                public void onPayResult(final H5PayResultModel result) {
+                    final String url = result.getReturnUrl();
+                    if (!TextUtils.isEmpty(url)) {
+                        AgentWebX5Utils.runInUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.loadUrl(url);
+                            }
+                        });
+                    }
+                }
+            });
+            LogUtils.i(TAG, "alipay-isIntercepted:" + isIntercepted + "  url:" + url);
+            return isIntercepted;
+        } catch (Throwable ignore) {
+            if (AgentWebX5Config.DEBUG) {
+                ignore.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static final String SCHEME_SMS = "sms:";
+
+
+    private boolean handleLinked(String url) {
+        if (url.startsWith(android.webkit.WebView.SCHEME_TEL)
+                || url.startsWith(SCHEME_SMS)
+                || url.startsWith(android.webkit.WebView.SCHEME_MAILTO)
+                || url.startsWith(android.webkit.WebView.SCHEME_GEO)) {
+            try {
+                Activity mActivity = null;
+                if ((mActivity = mWeakReference.get()) == null)
+                    return false;
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                mActivity.startActivity(intent);
+            } catch (ActivityNotFoundException ignored) {
+                if (AgentWebX5Config.DEBUG) {
+                    ignored.printStackTrace();
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
 
@@ -183,21 +352,6 @@ public class DefaultWebClient extends WrapperWebViewClient {
                 mActivity.startActivity(intent);
                 return;
             }
-            /*intent=new Intent().setData(Uri.parse("market://details?id=" + intent.getPackage()));
-            info=packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            LogUtils.i("Info","resolveInfo:"+info);
-            if (info != null) {  //跳到应用市场
-                mActivity.startActivity(intent);
-                return;
-            }
-
-            intent=new Intent().setData(Uri.parse("https://play.google.com/store/apps/details?id=" + intent.getPackage()));
-            info=packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            LogUtils.i("Info","resolveInfo:"+info);
-            if (info != null) {  //跳到浏览器
-                mActivity.startActivity(intent);
-                return;
-            }*/
         }catch (Exception e){
             e.printStackTrace();
         }
