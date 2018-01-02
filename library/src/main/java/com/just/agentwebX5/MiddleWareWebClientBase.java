@@ -5,7 +5,7 @@ import com.tencent.smtt.sdk.WebViewClient;
 
 /**
  * Created by cenxiaozhong on 2017/12/15.
- *  https://github.com/Justson/AgentWeb
+ *  https://github.com/Justson/AgentWebX5
  */
 
 public class MiddleWareWebClientBase extends WrapperWebViewClient {

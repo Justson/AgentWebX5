@@ -35,7 +35,7 @@ import java.util.Map;
 
 /**
  * FrameLayout--嵌套WebView,ProgressBar
- * https://github.com/Justson/AgentWeb
+ * https://github.com/Justson/AgentWebX5
  * author just -- cxz
  */
 public class AgentWebX5 {

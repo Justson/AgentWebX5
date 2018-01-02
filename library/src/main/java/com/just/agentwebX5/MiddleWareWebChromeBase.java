@@ -5,7 +5,7 @@ import com.tencent.smtt.sdk.WebChromeClient;
 
 /**
  * Created by cenxiaozhong on 2017/12/16.
- *  https://github.com/Justson/AgentWeb
+ *  https://github.com/Justson/AgentWebX5
  */
 
 public class MiddleWareWebChromeBase extends WebChromeClientWrapper {
