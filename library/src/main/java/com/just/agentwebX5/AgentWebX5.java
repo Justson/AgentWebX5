@@ -101,6 +101,14 @@ public class AgentWebX5 {
         mWebSecurityController = new WebSecurityControllerImpl(mWebCreator.get(), this.mAgentWebX5.mJavaObjects, mSecurityType);
         this.webClientHelper = agentBuilder.webclientHelper;
 
+        this.isInterceptUnkownScheme = agentBuilder.isInterceptUnkownScheme;
+        if (agentBuilder.openOtherPage != null) {
+            this.openOtherAppWays = agentBuilder.openOtherPage.code;
+        }
+        this.mMiddleWrareWebClientBaseHeader = agentBuilder.header;
+        this.mMiddleWareWebChromeBaseHeader = agentBuilder.mChromeMiddleWareHeader;
+
+
         init();
         setDownloadListener(agentBuilder.mDownLoadResultListeners, agentBuilder.isParallelDownload, agentBuilder.icon);
     }
@@ -408,7 +416,7 @@ public class AgentWebX5 {
     private AgentWebX5 go(String url) {
 
         IndicatorController mIndicatorController = null;
-        if (!TextUtils.isEmpty(url) && (mIndicatorController = getIndicatorController()) != null && mIndicatorController.offerIndicator() != null){
+        if (!TextUtils.isEmpty(url) && (mIndicatorController = getIndicatorController()) != null && mIndicatorController.offerIndicator() != null) {
             getIndicatorController().offerIndicator().show();
         }
         this.getLoader().loadUrl(url);
@@ -486,6 +494,14 @@ public class AgentWebX5 {
         private boolean isParallelDownload = false;
         private int icon = -1;
         private PermissionInterceptor mPermissionInterceptor;
+
+
+        private MiddleWareWebClientBase tail;
+        private MiddleWareWebClientBase header;
+        private MiddleWareWebChromeBase mChromeMiddleWareTail;
+        private MiddleWareWebChromeBase mChromeMiddleWareHeader;
+        private DefaultWebClient.OpenOtherPageWays openOtherPage;
+        private boolean isInterceptUnkownScheme;
 
         private void addJavaObject(String key, Object o) {
             if (mJavaObject == null)
@@ -644,6 +660,42 @@ public class AgentWebX5 {
 
         public CommonAgentBuilder setWebChromeClient(@Nullable WebChromeClient webChromeClient) {
             this.mAgentBuilder.mWebChromeClient = webChromeClient;
+            return this;
+        }
+
+        public CommonAgentBuilder useMiddleWareWebClient(@NonNull MiddleWareWebClientBase middleWrareWebClientBase) {
+            if (middleWrareWebClientBase == null) {
+                return this;
+            }
+            if (this.mAgentBuilder.header == null) {
+                this.mAgentBuilder.header = this.mAgentBuilder.tail = middleWrareWebClientBase;
+            } else {
+                this.mAgentBuilder.tail.enq(middleWrareWebClientBase);
+                this.mAgentBuilder.tail = middleWrareWebClientBase;
+            }
+            return this;
+        }
+
+        public CommonAgentBuilder setOpenOtherPageWays(@Nullable DefaultWebClient.OpenOtherPageWays openOtherPageWays) {
+            this.mAgentBuilder.openOtherPage = openOtherPageWays;
+            return this;
+        }
+
+        public CommonAgentBuilder interceptUnkownScheme() {
+            this.mAgentBuilder.isInterceptUnkownScheme = true;
+            return this;
+        }
+
+        public CommonAgentBuilder useMiddleWareWebChrome(@NonNull MiddleWareWebChromeBase middleWareWebChromeBase) {
+            if (middleWareWebChromeBase == null) {
+                return this;
+            }
+            if (this.mAgentBuilder.mChromeMiddleWareHeader == null) {
+                this.mAgentBuilder.mChromeMiddleWareHeader = this.mAgentBuilder.mChromeMiddleWareTail = middleWareWebChromeBase;
+            } else {
+                this.mAgentBuilder.mChromeMiddleWareTail.enq(middleWareWebChromeBase);
+                this.mAgentBuilder.mChromeMiddleWareTail = middleWareWebChromeBase;
+            }
             return this;
         }
 
@@ -905,6 +957,7 @@ public class AgentWebX5 {
             this.mAgentBuilderFragment.mPermissionInterceptor = permissionInterceptor;
             return this;
         }
+
         public CommonBuilderForFragment setWebViewClient(@Nullable WebViewClient webChromeClient) {
             this.mAgentBuilderFragment.mWebViewClient = webChromeClient;
             return this;
@@ -927,10 +980,12 @@ public class AgentWebX5 {
             this.mAgentBuilderFragment.openOtherPage = openOtherPageWays;
             return this;
         }
+
         public CommonBuilderForFragment interceptUnkownScheme() {
             this.mAgentBuilderFragment.isInterceptUnkownScheme = true;
             return this;
         }
+
         public CommonBuilderForFragment useMiddleWareWebChrome(@NonNull MiddleWareWebChromeBase middleWareWebChromeBase) {
             if (middleWareWebChromeBase == null) {
                 return this;

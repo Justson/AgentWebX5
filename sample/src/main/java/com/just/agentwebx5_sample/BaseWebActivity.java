@@ -16,7 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.just.agentwebX5.AgentWebX5;
+import com.just.agentwebX5.DefaultWebClient;
 import com.just.agentwebX5.LogUtils;
+import com.just.agentwebX5.MiddleWareWebChromeBase;
+import com.just.agentwebX5.MiddleWareWebClientBase;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
@@ -36,6 +39,8 @@ public class BaseWebActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private TextView mTitleTextView;
     private AlertDialog mAlertDialog;
+    private MiddleWareWebChromeBase mMiddleWareWebChrome;
+    private MiddleWareWebClientBase mMiddleWareWebClient;
 
 
     @Override
@@ -63,16 +68,19 @@ public class BaseWebActivity extends AppCompatActivity {
         });
 
 
-
         long p = System.currentTimeMillis();
 
         mAgentWebX5 = AgentWebX5.with(this)//
-                .setAgentWebParent(mLinearLayout,new LinearLayout.LayoutParams(-1,-1) )//
+                .setAgentWebParent(mLinearLayout, new LinearLayout.LayoutParams(-1, -1))//
                 .useDefaultIndicator()//
                 .defaultProgressBarColor()
                 .setReceivedTitleCallback(mCallback)
                 .setWebChromeClient(mWebChromeClient)
                 .setWebViewClient(mWebViewClient)
+                .useMiddleWareWebChrome(getMiddleWareWebChrome())
+                .useMiddleWareWebClient(getMiddleWareWebClient())
+                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
+                .interceptUnkownScheme()
                 .setSecutityType(AgentWebX5.SecurityType.strict)
                 .setWebLayout(new WebLayout(this))
                 .createAgentWeb()//
@@ -84,11 +92,6 @@ public class BaseWebActivity extends AppCompatActivity {
 
         long n = System.currentTimeMillis();
         Log.i("Info", "init used time:" + (n - p));
-
-
-
-
-
 
 
     }
@@ -185,5 +188,13 @@ public class BaseWebActivity extends AppCompatActivity {
         super.onDestroy();
         //mAgentWebX5.destroy();
         mAgentWebX5.getWebLifeCycle().onDestroy();
+    }
+
+    public MiddleWareWebChromeBase getMiddleWareWebChrome() {
+        return mMiddleWareWebChrome;
+    }
+
+    public MiddleWareWebClientBase getMiddleWareWebClient() {
+        return mMiddleWareWebClient;
     }
 }

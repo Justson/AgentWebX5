@@ -25,7 +25,7 @@ public class AgentWebX5Config {
     static String AGENTWEB_FILE_PATH;
     static final String FILE_CACHE_PATH = "agentweb-cache";
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     static final boolean isKikatOrBelowKikat = Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT;
 //    static final boolean isKikatOrBelowKikat= true;
 

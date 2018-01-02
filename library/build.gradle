@@ -45,7 +45,7 @@ publish {
     userOrg = 'just'
     groupId = 'com.just.agentwebX5'
     artifactId = 'agentwebX5'
-    version = '1.0.0'
+    version = '2.0.0'
     description = 'very easy to build you web page'
     website = "https://github.com/Justson/AgentWebX5"
 
