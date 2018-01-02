@@ -53,7 +53,7 @@ public class CommonActivity extends AppCompatActivity {
             /*Fragment 使用AgenWebt*/
             case 0:
                 ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());
-                mBundle.putString(AgentWebX5Fragment.URL_KEY, "http://www.vip.com");
+                mBundle.putString(AgentWebX5Fragment.URL_KEY, "https://m.vip.com/?source=www&jump_https=1#!hash");
                 break;
             case 1:
                 ft.add(R.id.container_framelayout, mAgentWebX5Fragment = AgentWebX5Fragment.getInstance(mBundle = new Bundle()), AgentWebX5Fragment.class.getName());

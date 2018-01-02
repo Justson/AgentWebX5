@@ -31,6 +31,8 @@ import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 
+import java.util.HashMap;
+
 import static com.just.agentwebx5_sample.R.id.iv_back;
 
 
@@ -72,7 +74,7 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAgentWebX5 = AgentWebX5.with(this)//
-                .setAgentWebParent((LinearLayout) view, new LinearLayout.LayoutParams(-1,-1))//
+                .setAgentWebParent((LinearLayout) view, new LinearLayout.LayoutParams(-1, -1))//
                 .setIndicatorColorWithHeight(-1, 2)//
                 .setWebSettings(getSettings())//
                 .setWebViewClient(mWebViewClient)
@@ -104,7 +106,8 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
 
     }
 
-
+    //2993.4 1909.1
+    //3363 1781 | 2802 1837|2461 2663| 4943 2843|2714 1526|3183 1780|2669 1630|2780 1704|2870 1562|2779 1565|2997 1862|
     protected PermissionInterceptor mPermissionInterceptor = new PermissionInterceptor() {
 
         //AgentWeb 在触发某些敏感的 Action 时候会回调该方法， 比如定位触发 。
@@ -116,11 +119,11 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
             return false;
         }
     };
-    protected DownLoadResultListener mDownLoadResultListener=new DownLoadResultListener() {
+    protected DownLoadResultListener mDownLoadResultListener = new DownLoadResultListener() {
         @Override
         public void success(String path) {
 
-            Log.i("Info","path:"+path);
+            Log.i("Info", "path:" + path);
             /*File mFile=new File(path);
             mFile.delete();*/
         }
@@ -128,7 +131,7 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
         @Override
         public void error(String path, String resUrl, String cause, Throwable e) {
 
-            Log.i("Info","path:"+path+"  url:"+resUrl+"  couse:"+cause+"  Throwable:"+e);
+            Log.i("Info", "path:" + path + "  url:" + resUrl + "  couse:" + cause + "  Throwable:" + e);
         }
     };
 
@@ -155,7 +158,7 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
 
         }
     };
-    protected WebChromeClient mWebChromeClient=new WebChromeClient(){
+    protected WebChromeClient mWebChromeClient = new WebChromeClient() {
 
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
@@ -163,13 +166,12 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
         }
     };
     protected com.tencent.smtt.sdk.WebViewClient mWebViewClient = new com.tencent.smtt.sdk.WebViewClient() {
+        private HashMap<String, Long> timer = new HashMap<>();
 
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
         }
-
-
 
 
         @Override
@@ -180,24 +182,38 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
             //优酷想唤起自己应用播放该视频 ， 下面拦截地址返回 true  则会在应用内 H5 播放 ，禁止优酷唤起播放该视频， 如果返回 false ， DefaultWebClient  会根据intent 协议处理 该地址 ， 首先匹配该应用存不存在 ，如果存在 ， 唤起该应用播放 ， 如果不存在 ， 则跳到应用市场下载该应用 .
             if (url.startsWith("intent://"))
                 return true;
-            else if(url.startsWith("youku"))
+            else if (url.startsWith("youku"))
                 return true;
 //            else if(isAlipay(view,url))  //不需要，defaultWebClient内部会自动处理
 //                return true;
 
 
-
             return false;
         }
 
+        int index=1;
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
-            Log.i("Info", "url:" + url + " onPageStarted  target:" + getUrl());
+            Log.i(TAG, "url:" + url + " onPageStarted  url:" + getUrl());
+            timer.put(url, new Long(System.currentTimeMillis()));
             if (url.equals(getUrl())) {
                 pageNavigator(View.GONE);
             } else {
                 pageNavigator(View.VISIBLE);
+            }
+
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+
+            Log.i(TAG, "onPageFinished  url:" + url + "  time:" + timer.get(url)+"   index:"+(index++));
+            if (timer.get(url) != null) {
+                long overTime = System.currentTimeMillis();
+                Long startTime = timer.get(url);
+                Log.i(TAG, "  page url:" + url + "  used time:" + (overTime - startTime));
             }
 
         }
@@ -208,7 +224,7 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.i("Info","onActivityResult -- >callback:"+requestCode+"   0x254:"+0x254);
+        Log.i("Info", "onActivityResult -- >callback:" + requestCode + "   0x254:" + 0x254);
 //        Log.i("Info","onActivityResult result");
         mAgentWebX5.uploadFileResult(requestCode, resultCode, data);
     }
@@ -227,10 +243,9 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
     }
 
 
-
     private void pageNavigator(int tag) {
 
-       // Log.i("Info", "TAG:" + tag);
+        // Log.i("Info", "TAG:" + tag);
         mBackImageView.setVisibility(tag);
         mLineView.setVisibility(tag);
     }

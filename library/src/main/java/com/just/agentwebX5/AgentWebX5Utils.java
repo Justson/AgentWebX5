@@ -107,9 +107,9 @@ public class AgentWebX5Utils {
         if (m.getHandler() != null)
             m.getHandler().removeCallbacksAndMessages(null);
         m.removeAllViews();
-        ViewGroup mViewGroup = null;
+        /*ViewGroup mViewGroup = null;
         if ((mViewGroup = ((ViewGroup) m.getParent())) != null)
-            mViewGroup.removeView(m);
+            mViewGroup.removeView(m);*/
         m.setWebChromeClient(null);
         m.setWebViewClient(null);
         m.setTag(null);

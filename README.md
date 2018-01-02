@@ -50,8 +50,44 @@
 
 
 ## 注意事项 
-1. AgentWebX5 内部并没有直接依赖X5库 ，需要用户到[腾讯官网](https://x5.tencent.com/tbs/)下载 ， 并在项目中依赖该库 。
+1. AgentWebX5 内部并没有直接依赖X5库 ，需要用户到[腾讯X5官网](https://x5.tencent.com/tbs/)下载 ， 并在项目中依赖该库 。
 2. 由于使用的是 X5 内核，不是 Google 官方控件， 所以很多第三方开源组件不支持 。
 3. 支付宝需要引入[支付宝SDK](https://open.alipay.com/platform/home.htm)项目中依赖上支付宝SDK即可 ,微信支付不需要做任何操作。
 4. 注意权限 。
 5. 注意腾讯X5库官方升级并替换成最新的库。 
+
+## 问答
+
+### AgentWeb 和 AgentWebX5 有什么区别吗？
+AgentWebX5 和 AgentWeb 区别在于 AgentWeb 依赖于系统 WebView ，而 AgentWebX5 依赖是腾讯WebViewX5 ， AgentWebX5 是把 AgentWeb 内部 WebView 替换成了 WebViewX5 。
+
+### WebView 与 WebViewX5 的性能区别吗？
+
+手机信息              | URL                              |  腾讯WebViewX5平均耗时(ms)  | 系统WebView平均耗时(ms)|次数|
+--------------------|-----------------------------------------------------|-----------------------|-----|---|
+红米4A MIUI 8 Android 6.0.1  | `https://m.vip.com/?source=www&jump_https=1#!hash`  | 3906 | 3764 | 10 次|
+红米4A MIUI 8 Android 6.0.1 | `https://m.vip.com/wearable.html `  | 2472 | 2232 |10 次|
+三星  Android 7.0.1 | `https://m.vip.com/?source=www&jump_https=1 `  | 3078.2 | 2926.1 |10 次|
+三星  Android 7.0.1 | `https://m.vip.com/wearable.html`  | 1909.1 | 1592.3 |10 次|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
