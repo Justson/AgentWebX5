@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.just.agentwebX5.AgentWebX5;
+import com.just.agentwebX5.AgentWebX5Config;
 import com.just.agentwebX5.ChromeClientCallbackManager;
 import com.just.agentwebX5.DefaultWebClient;
 import com.just.agentwebX5.DownLoadResultListener;
@@ -95,6 +96,8 @@ public class AgentWebX5Fragment extends Fragment implements FragmentKeyDown {
 
 
         initView(view);
+
+        
 
 //        mAgentWebX5.getWebCreator().getGroup().setVisibility(View.GONE);
 //        X5WebView mX5WebView=new X5WebView(getActivity());
