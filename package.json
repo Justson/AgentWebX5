@@ -1,0 +1,28 @@
+{
+  "name": "AgentWebX5",
+  "version": "1.0.0",
+  "description": "基于腾讯X5内核版的 [AgentWeb](https://github.com/Justson/AgentWeb) ，简单易用 ， 带有进度条 、 支持文件上传 、 下载 、 简化 Javascript 通信 、 链式调用  、性能更优 。更多使用请参照上面的 sample 。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Justson/AgentWebX5.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Justson/AgentWebX5/issues"
+  },
+  "homepage": "https://github.com/Justson/AgentWebX5#readme",
+  "devDependencies": {
+    "cz-conventional-changelog": "^2.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
