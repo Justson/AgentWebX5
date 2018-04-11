@@ -21,13 +21,6 @@ import com.tencent.smtt.sdk.WebView;
 import java.lang.reflect.Method;
 
 /**
- * <b>@项目名：</b> agentwebX5<br>
- * <b>@包名：</b><br>
- * <b>@创建者：</b> cxz --  just<br>
- * <b>@创建时间：</b> &{DATE}<br>
- * <b>@公司：</b> <br>
- * <b>@邮箱：</b> cenxiaozhong.qqcom@qq.com<br>
- * <b>@描述:source CODE  https://github.com/Justson/AgentWebX5</b><br>
  */
 
 public class WebChromeClientWrapper extends WebChromeClient {

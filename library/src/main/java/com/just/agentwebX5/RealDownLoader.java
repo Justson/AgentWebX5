@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by cenxiaozhong on 2017/5/13.
- * source CODE  https://github.com/Justson/AgentWeb
+ * source code  https://github.com/Justson/AgentWeb
  */
 
 public class RealDownLoader extends AsyncTask<Void, Integer, Integer> implements Observer {
