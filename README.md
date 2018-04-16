@@ -60,16 +60,6 @@
 ### AgentWeb 和 AgentWebX5 有什么区别吗？
 AgentWebX5 和 AgentWeb 区别在于 AgentWeb 依赖于系统 WebView ，而 AgentWebX5 依赖是腾讯WebViewX5 ， AgentWebX5 是把 AgentWeb 内部 WebView 替换成了 WebViewX5 。
 
-### WebView 与 WebViewX5 的性能区别吗？
-
-手机信息              | URL                              |  腾讯WebViewX5平均耗时(ms)  | 系统WebView平均耗时(ms)|次数|
---------------------|-----------------------------------------------------|-----------------------|-----|---|
-红米4A MIUI 8 Android 6.0.1  | `https://m.vip.com/?source=www&jump_https=1#!hash`  | 3906 | 3764 | 10 次|
-红米4A MIUI 8 Android 6.0.1 | `https://m.vip.com/wearable.html `  | 2472 | 2232 |10 次|
-三星  Android 7.0.1 | `https://m.vip.com/?source=www&jump_https=1#!hash `  | 3078.2 | 2926.1 |10 次|
-三星  Android 7.0.1 | `https://m.vip.com/wearable.html`  | 1909.1 | 1592.3 |10 次|
-锤子  Android 5.1.1 | `https://m.vip.com/?source=www&jump_https=1#!hash `  | 2106 | 2226 |10 次|
-锤子  Android 5.1.1 | `https://m.vip.com/wearable.html`  | 1340| 1323 |10 次|
 
 
 
