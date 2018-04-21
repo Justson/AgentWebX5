@@ -58,7 +58,7 @@
 ## 问答
 
 ### AgentWeb 和 AgentWebX5 有什么区别吗？
-AgentWebX5 和 AgentWeb 区别在于 AgentWeb 依赖于系统 WebView ，而 AgentWebX5 依赖是腾讯X5内核 ， AgentWebX5 是把 AgentWeb 内部 WebView 替换成了 WebViewX5 。
+AgentWebX5 和 AgentWeb 区别在于 AgentWeb 依赖于系统 WebView ，而 AgentWebX5 依赖是腾讯X5内核 ， AgentWebX5 是把 AgentWeb 内部 Android系统提供的WebView 替换成了X5库WebView 。
 
 
 
