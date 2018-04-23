@@ -46,8 +46,6 @@
 2. 引入 `AgentWebX5`
 3. 需要全局初始化X5内核 `QbSdk.initX5Environment(getApplicationContext(),  cb);`
 
-
-
 ## 注意事项 
 1. AgentWebX5 内部并没有直接依赖X5库 ，需要用户到[腾讯X5官网](https://x5.tencent.com/tbs/)下载 ， 并在项目中依赖该库 。
 2. 由于使用的是 X5 内核，不是 Google 官方控件， 所以很多第三方开源组件不支持 。
