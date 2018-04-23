@@ -22,12 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-
 /**
- * FrameLayout--嵌套WebView,ProgressBar
  * https://github.com/Justson/AgentWebX5
- * author just -- cxz
  */
 public class AgentWebX5 {
 
