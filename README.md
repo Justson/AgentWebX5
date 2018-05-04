@@ -52,6 +52,7 @@
 3. 支付宝需要引入[支付宝SDK](https://open.alipay.com/platform/home.htm)项目中依赖上支付宝SDK即可 ,微信支付不需要做任何操作。
 4. 注意权限 。
 5. 注意腾讯X5库官方升级并替换成最新的库。 
+6. [Alert 阻塞 ](https://github.com/Justson/AgentWebX5/issues/21)
 
 ## 问答
 
