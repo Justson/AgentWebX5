@@ -100,6 +100,7 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         canvas.drawRect(0, 0, currentProgress / 100 * Float.valueOf(this.getWidth()), this.getHeight(), mPaint);
     }
 
+    @Override
     public void show() {
 
         LogUtils.i("WebProgress","WebProgress show");
@@ -127,6 +128,7 @@ public class WebProgress extends BaseIndicatorView implements BaseProgressSpec {
         startAnim(progress, false);
     }
 
+    @Override
     public void hide() {
         TAG = FINISH;
     }

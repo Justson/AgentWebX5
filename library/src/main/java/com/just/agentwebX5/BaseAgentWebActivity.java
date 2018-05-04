@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by cenxiaozhong on 2017/7/18.
  */
-
 public class BaseAgentWebActivity extends AppCompatActivity {
 
     @Override

@@ -356,7 +356,6 @@ public class AgentWebX5Utils {
         int i = 0;
         for (Uri mUri : uris) {
             paths[i++] = Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 ? getFileAbsolutePath(activity, mUri) : getRealPathBelowVersion(activity, mUri);
-//            Log.i("Info", "path:" + paths[i-1] + "  uri:" + mUri);
 
         }
         return paths;
