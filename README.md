@@ -1,6 +1,6 @@
 
 
-## AgentWebX5 介绍
+## AgentWebX5 介绍（该库不再维护）
 
 基于腾讯X5内核版的 [AgentWeb](https://github.com/Justson/AgentWeb) ，简单易用 ， 带有进度条 、 支持文件上传 、 下载 、 简化 Javascript 通信 、 链式调用  、性能更优 。更多使用请参照上面的 sample 。 
 
